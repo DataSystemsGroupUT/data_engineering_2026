@@ -20,6 +20,22 @@ services:
       - ../mnt/00_nginx/:/usr/share/nginx/html/
     networks:
       - my_network
+  db:
+    image: postgres:16.4
+    container_name: my_postgres
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      PGUSER: postgres # lets the psql client run without connection flags
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./pgtmp:/tmp # COPY reads files from the server's filesystem, so they must be mounted in
+    networks:
+      - my_network
 
 networks:
   my_network:
+
+volumes:
+  pg_data:

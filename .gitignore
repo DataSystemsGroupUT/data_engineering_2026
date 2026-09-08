@@ -2,3 +2,4 @@
 05_ClickHouse/clickhouse_data/uuid
 05_ClickHouse/*
 09_Security_Privacy/clickhouse_data
+.requirements/
