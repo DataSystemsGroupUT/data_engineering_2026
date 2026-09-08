@@ -41,3 +41,6 @@ Create the `users` table if it doesn't exist.
 #### Level 5
 Create a database view that joins the `countries` and `users` tables.   
 The view should contain the `name` fields, `country`, and coordinates from both tables.
+
+#### Submission
+You should submit the compse.yml to Moodle before 18 today.
