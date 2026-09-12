@@ -163,9 +163,9 @@ You can use the same containers from last practice session. In case you don't, p
           POSTGRES_USER: ${POSTGRES_USER}
           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
           POSTGRES_DB: ${POSTGRES_DB}
-        PGUSER: ${POSTGRES_USER} # for the psql client
-        PGPASSWORD: ${POSTGRES_PASSWORD} # for the psql client
-        PGDATABASE: ${POSTGRES_DB} # for the psql client
+          PGUSER: ${POSTGRES_USER} # for the psql client
+          PGPASSWORD: ${POSTGRES_PASSWORD} # for the psql client
+          PGDATABASE: ${POSTGRES_DB} # for the psql client
         ports:
           - "5432:5432"
         volumes:
@@ -436,10 +436,13 @@ CREATE TABLE Purchases (
 
 -- JUNCTION TABLE: Purchase_Items
 -- Resolves the many-to-many relationship between Purchases and Products.
+-- UnitPrice captures the price at the time of purchase so that historical
+-- totals remain accurate even if Products.Price changes later.
 CREATE TABLE Purchase_Items (
     PurchaseID INT,
     ProductID INT,
     Quantity INT NOT NULL CHECK (Quantity > 0),
+    UnitPrice DECIMAL(10, 2) NOT NULL,  -- price at time of purchase
     PRIMARY KEY (PurchaseID, ProductID),
     CONSTRAINT fk_purchase
         FOREIGN KEY(PurchaseID)
