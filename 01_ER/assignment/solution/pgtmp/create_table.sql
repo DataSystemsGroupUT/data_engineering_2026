@@ -67,10 +67,13 @@ CREATE TABLE Purchases (
 
 -- JUNCTION TABLE: Purchase_Items
 -- Resolves the many-to-many relationship between Purchases and Products.
+-- UnitPrice captures the price at the time of purchase so that historical
+-- totals remain accurate even if Products.Price changes later.
 CREATE TABLE Purchase_Items (
     PurchaseID INT,
     ProductID INT,
     Quantity INT NOT NULL CHECK (Quantity > 0),
+    UnitPrice DECIMAL(10, 2) NOT NULL,  -- price at time of purchase
     PRIMARY KEY (PurchaseID, ProductID),
     CONSTRAINT fk_purchase
         FOREIGN KEY(PurchaseID)
@@ -81,6 +84,8 @@ CREATE TABLE Purchase_Items (
 );
 
 -- Table for Payments
+-- Amount is the total paid. It should equal SUM(Quantity * UnitPrice)
+-- from Purchase_Items for the same PurchaseID.
 CREATE TABLE Payments (
     PaymentID SERIAL PRIMARY KEY,
     PurchaseID INT NOT NULL UNIQUE,
