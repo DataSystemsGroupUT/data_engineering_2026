@@ -178,8 +178,28 @@ erDiagram
 
 ## 5. Environment Setup
 
-We will use the same environment setup as in Practice 2.
-The compose.yml file remains exactly the same, so no changes are required.
+We use the same PostgreSQL and pgAdmin setup as in Practice 2. The Compose
+configuration is in [solution/compose.yml](solution/compose.yml).
+
+Example environment variables are provided in
+[solution/.env_example](solution/.env_example). Copy its contents into a file
+named `.env` in the same folder as `compose.yml`, keeping the variable names and
+structure. Set the values for your local database and pgAdmin environment before
+starting the services.
+
+> [!NOTE]
+> **Why keep an example file and a local settings file?**
+>
+> We track `.env_example` in Git to document the variables the environment needs
+> and provide placeholders or safe demonstration values. This lets everyone
+> reproduce the setup without sharing private credentials.
+>
+> Your `.env` contains the values used by your local setup, which may include
+> passwords or other secrets. It is excluded from Git by this lesson's
+> `.gitignore`. Keep real credentials out of `.env_example` and other tracked
+> files. If you add a required variable, update the example so others know how to
+> configure it. Ignoring `.env` helps prevent accidental commits; it does not
+> encrypt the file or remove secrets already committed to Git history.
 
 ## 6. Implementing in PostgreSQL
 
@@ -481,5 +501,3 @@ ORDER BY TotalSales DESC;
 - Historical purchases remain linked to the original city.
 - New purchases after the move link to the new city.
 - This ensures analytics correctly reflects sales by location and customer history.
-
-
