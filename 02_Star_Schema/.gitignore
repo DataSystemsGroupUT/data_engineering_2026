@@ -1,2 +1,2 @@
-/solution/.env
-/solution/pgdata/
+.env
+pgdata/

@@ -1,8 +1,8 @@
 # Star schema reference solution
 
 Try the worksheet and query tasks in the [practice instructions](../README.md)
-first. These files provide a consistent model, fixture, and set of reference
-answers. They are also a fallback when setup takes too much classroom time.
+first. Use this guide to compare your model, query answers, and explanations with
+the reference solution.
 
 ## Model decisions
 
@@ -83,15 +83,31 @@ The three starter replacements are:
 
 ## Script order
 
-Use the [environment instructions](../README.md#environment-preparation) first.
-Run these commands from `02_Star_Schema/solution`:
+Use the [environment instructions](../README.md#environment-preparation) to
+prepare your own workspace and start the services. For a complete reference run,
+save the following files in that workspace. The reference filenames keep your
+own schema and query answers intact.
+
+| Supplied file | Save in your workspace as |
+| --- | --- |
+| [Completed schema](01_create_tables.sql) | `sql/01_create_tables_reference.sql` |
+| [Data loader](../starter/02_load_data.sql) | `sql/02_load_data.sql` |
+| [Reference queries](03_analysis.sql) | `sql/03_analysis_reference.sql` |
+| [Data checks](../starter/04_validate.sql) | `sql/04_validate.sql` |
+
+Reuse the loader and checks if you already copied them during the practice.
+Run these commands from your workspace's folder containing `compose.yml`:
 
 ```bash
-docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /sql/01_create_tables.sql
-docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /sql/02_load_data.sql
-docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /sql/03_analysis.sql
-docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /sql/04_validate.sql
+docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/01_create_tables_reference.sql
+docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/02_load_data.sql
+docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/03_analysis_reference.sql
+docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/04_validate.sql
 ```
+
+`-v ON_ERROR_STOP=1` stops a script at the first SQL error; fix it before running
+the next file. `-f` selects the file inside the container. See the
+[command explanation](../README.md#run-the-sql-files) for details.
 
 The schema script recreates `star`, deleting its previous tables and data. The
 loader replaces the five tables' contents and translates source IDs to dimension
@@ -175,7 +191,7 @@ division by zero when adapted to a dataset with empty or zero-unit groups.
 
 ## Validation and limits
 
-[04_validate.sql](pgtmp/04_validate.sql) checks fixture totals, uniqueness,
+[04_validate.sql](../starter/04_validate.sql) checks fixture totals, uniqueness,
 dimension matches, purchase-level consistency, monthly reconciliation, unknown
 customer retention, and representative basket and price results. In particular,
 the unknown shopper contributes three lines and EUR 5.50; losing those lines

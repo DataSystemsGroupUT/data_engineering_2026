@@ -23,37 +23,52 @@ Dates are fixed so the results do not depend on when you run the exercise.
 
 ## Work through the change
 
-Run commands from `02_Star_Schema/solution`. You may instead execute the complete
-files in pgAdmin. The setup script **recreates only `scd_demo`**, removing previous
-attempts at this extension.
+Prepare your workspace and start the services using the
+[environment instructions](../../README.md#environment-preparation) if you have
+not already done so. Create a `scd2` folder inside your workspace's `sql` folder.
+Copy each linked file there as you reach its step below, keeping its filename.
+The existing SQL mount makes these files available without changing Compose.
 
-1. Run [01_setup.sql](01_setup.sql) and inspect `scd_demo.DimCustomer` and
-   `scd_demo.FactSales`. Alice has one version and one September 30 sale for EUR 9.00.
+Run commands from the folder containing `compose.yml`. Alternatively, paste each
+complete local SQL file into pgAdmin's Query Tool, or open and execute it as a
+script in DBeaver. The setup script **recreates only `scd_demo`**, removing
+previous attempts at this extension.
+
+The commands use `-v ON_ERROR_STOP=1` to stop each script at its first SQL error;
+fix it before continuing. `-f` selects the file inside the container, where
+your local `sql/scd2/` folder is available at `/sql/scd2/`. See the
+[command explanation](../../README.md#run-the-sql-files) for details.
+
+1. Save [01_setup.sql](01_setup.sql) as `sql/scd2/01_setup.sql` in your workspace,
+   then run it. Inspect `scd_demo.DimCustomer` and `scd_demo.FactSales`. Alice has
+   one version and one September 30 sale for EUR 9.00.
 
    ```bash
-   docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /optional/scd2/01_setup.sql
+   docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/scd2/01_setup.sql
    ```
 
-2. Read [02_customer_move.sql](02_customer_move.sql) before running it. Predict
-   the city for each incoming sale: October 1, September 29, and October 3.
+2. Save [02_customer_move.sql](02_customer_move.sql) as
+   `sql/scd2/02_customer_move.sql`. Read it before running it and predict the city
+   for each incoming sale: October 1, September 29, and October 3.
    Explain why the second record must not be assigned to the current version.
 
    ```bash
-   docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /optional/scd2/02_customer_move.sql
+   docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/scd2/02_customer_move.sql
    ```
 
 3. Query both customer versions and join the facts to them using `CustomerKey`.
    Group revenue by city. Explain why the original fact does not need updating.
 
-4. Run [03_validate.sql](03_validate.sql) and compare the results with your prediction.
+4. Save [03_validate.sql](03_validate.sql) as `sql/scd2/03_validate.sql`, run it,
+   and compare the results with your prediction.
 
    ```bash
-   docker compose exec db psql -X -v ON_ERROR_STOP=1 -f /optional/scd2/03_validate.sql
+   docker compose exec db psql -v ON_ERROR_STOP=1 -f /sql/scd2/03_validate.sql
    ```
 
 Run the move script once per setup. To repeat the exercise, start again with
-`01_setup.sql`. The dimension change and new facts are committed together; a
-failed lookup or constraint violation rolls back that batch. If using pgAdmin
+`sql/scd2/01_setup.sql`. The dimension change and new facts are committed together;
+a failed lookup or constraint violation rolls back that batch. If using pgAdmin
 and an error leaves a transaction open, run `ROLLBACK;` before restarting.
 
 <details>
