@@ -1,0 +1,13 @@
+# Postgres bind-mount data directories (created by docker compose)
+pgdata_airflow/
+pgdata_prices/
+
+# Airflow task logs
+logs/
+
+# Order JSON files produced by the price_trend_analyzer DAG
+data/orders/*.json
+
+# Machine-specific image architecture (COMPOSE_PLATFORM); regenerate per
+# machine with the command in the README's "How to Run" section.
+.env
