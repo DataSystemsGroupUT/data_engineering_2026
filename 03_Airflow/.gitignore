@@ -5,9 +5,12 @@ pgdata_prices/
 # Airflow task logs
 logs/
 
-# Order JSON files produced by the price_trend_analyzer DAG
+# Order JSON files produced by the price_trend_analyzer DAG,
+# and the .done files left behind once order_submitter has processed them
 data/orders/*.json
+data/orders/*.done
 
-# Machine-specific image architecture (COMPOSE_PLATFORM); regenerate per
-# machine with the command in the README's "How to Run" section.
+# Local docker compose overrides (machine-specific, never committed).
+# The committed template is .env.example -- copy it to .env to customize.
 .env
+!.env.example

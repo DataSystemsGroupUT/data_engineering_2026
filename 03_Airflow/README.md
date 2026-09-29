@@ -112,6 +112,7 @@ Drawn in board.
 <pre>
 03_Airflow/
 ├── compose.yml
+├── .env.example                       # copy to .env to override defaults
 ├── solution/                          # reference solutions
 │   ├── price_trend_analyzer.py        # single task
 │   ├── price_trend_analyzer_tasks.py  # one task per step
@@ -141,21 +142,11 @@ Drawn in board.
 
 ## How to Run
 
-First generate a `.env` file pinning the images to your machine's architecture
-(run once):
-
-```
-printf 'COMPOSE_PLATFORM=linux/%s\n' \
-  "$(case $(uname -m) in arm64|aarch64) echo arm64;; *) echo amd64;; esac)" > .env
-```
-
-Then start everything:
-
 ```
 docker compose up -d
 ```
 
-That second command is all you need from then on. The `airflow-init` service waits until both
+That single command is all you need. The `airflow-init` service waits until both
 databases report healthy, then fixes ownership on the mounted directories,
 migrates the metadata DB, creates the admin user, and registers the `prices_db`
 connection. The webserver and scheduler wait for `airflow-init` to finish before
@@ -168,6 +159,23 @@ docker compose logs -f airflow-init
 ```
 
 Re-running `docker compose up -d` is safe -- initialization is idempotent.
+
+#### Configuration
+
+Credentials, ports and image versions are read from environment variables with
+sensible defaults baked in, so the stack runs with no configuration at all. To
+change anything -- a port that clashes with something already running, say --
+copy the template and edit it:
+
+```
+cp .env.example .env
+```
+
+`.env` is gitignored; `.env.example` is the committed reference.
+
+`compose.yml` deliberately pins **no CPU architecture**. Docker selects the image
+for your machine. On Apple Silicon / ARM, configure your Docker engine rather than
+adding a `platform:` key -- see *Troubleshooting* below.
 
 ### Troubleshooting
 
@@ -191,14 +199,22 @@ rm -rf pgdata_airflow pgdata_prices
 docker compose up -d
 ```
 
-**Platform mismatch errors on Apple Silicon**
+**Platform mismatch errors (`image ... does not match the specified platform`)**
 
-If you see `image ... does not match the specified platform`, your `.env` is missing
-or wrong -- regenerate it with the command in *How to Run*. This happens when
-`DOCKER_DEFAULT_PLATFORM=linux/amd64` is exported in your shell; the `platform:`
-setting in `compose.yml` overrides it, but only if `.env` exists. Note that an
-interrupted start caused by this will itself leave corrupt `pgdata_*` directories,
-so you may need both fixes.
+`compose.yml` does not pin a CPU architecture, so Docker normally pulls the image
+matching your machine. This error means your Docker engine has been told to prefer
+a different one -- usually `DOCKER_DEFAULT_PLATFORM=linux/amd64` exported in your
+shell. Fix it in your own environment rather than in `compose.yml`:
+
+```
+unset DOCKER_DEFAULT_PLATFORM
+```
+
+Make it permanent by removing the export from your shell profile
+(`~/.zshrc`, `~/.bashrc`) or by adjusting Docker Desktop's settings.
+
+An interrupted start caused by this leaves corrupt `pgdata_*` directories behind,
+so you will usually need the fix above *and* the cleanup from the previous item.
 
 ## Login credentials
 
@@ -214,6 +230,8 @@ Password: airflow
 | **airflow-db** | `airflow`           | `airflow`     | 5432 |
 | **prices-db**  | `prices_user`       | `prices_pass` | 5433 |
 | **pgAdmin**    | `admin@example.com` | `admin`       | 5050 |
+
+These are the defaults. Override any of them in `.env` (see `.env.example`).
 
 Access pgAdmin at:  
 [http://localhost:5050](http://localhost:5050)
@@ -242,12 +260,12 @@ tracking Bitcoin prices, calculating a rolling average, and triggering buy/sell 
 
 1. Fetches BTC price periodically (e.g., every minute) from CoinGecko API (no authentication required).
 2. Stores it in a dedicated Postgres database (`prices-db`) in `btc_prices` table.
-3. Computes 15-minute rolling average and stores in `rolling_averages`.
-4. Makes a decision:
+3. Computes 15-minute rolling average and stores in `btc_rolling_avg`.
+4. Makes a decision when the price **crosses** the rolling average:
 
-   - **BUY** if the price drops below the rolling average.
-   - **SELL** if the price exceeds the rolling average.
-5. Logs all results and decisions into the `orders` table.
+   - **BUY** when the price rises above the rolling average after being below it.
+   - **SELL** when the price drops below the rolling average after being above it.
+5. Logs all results and decisions into the `orders_log` table.
 
 ---
 
