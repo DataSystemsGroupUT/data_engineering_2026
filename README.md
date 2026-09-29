@@ -25,7 +25,7 @@ instructions that are missing from the repository.
 | 1 | 8 Sep 2026 | Docker and PostgreSQL | [Docker practice](00_Docker/README.md) | Ok |
 | 2 | 15 Sep 2026 | Relational modeling and ER diagrams | [ER practice](01_ER/assignment/README.md) | Ok |
 | 3 | 22 Sep 2026 | Dimensional modeling and star schemas | [Star schema practice](02_Star_Schema/README.md) | Ok |
-| 4 | 29 Sep 2026 | Workflow orchestration with Airflow | [Airflow practice](03_Airflow/README.md) | Update needed |
+| 4 | 29 Sep 2026 | Workflow orchestration with Airflow | [Airflow practice](03_Airflow/README.md) | Ok |
 | 5 | 6 Oct 2026 | Data transformation with dbt | [dbt practice](06_dbt/README.md) | Update needed |
 | 6 | 13 Oct 2026 | Semi-structured data: MongoDB and Neo4j | [MongoDB practice](07_MongoDB/README.md); Neo4j materials missing | Update needed |
 | 7 | 20 Oct 2026 | Data visualization: Streamlit and Superset | [Superset practice](11_Superset/README.md); Streamlit materials missing | Update needed |
