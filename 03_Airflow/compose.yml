@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # --- Airflow metadata database ---
   airflow-db:
@@ -45,7 +43,7 @@ services:
 
   # --- pgAdmin UI for both databases ---
   pgadmin:
-    container_name: pgadmin
+    container_name: airflow-pgadmin
     image: elestio/pgadmin:REL-8_10
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
@@ -75,9 +73,12 @@ services:
       - ./logs:/opt/airflow/logs
       - ./data/orders:/tmp/data/orders
     depends_on:
-      - airflow-init
-      - airflow-db
-      - prices-db
+      airflow-init:
+        condition: service_completed_successfully
+      airflow-db:
+        condition: service_healthy
+      prices-db:
+        condition: service_healthy
     restart: always
 
   # --- Airflow Scheduler ---
@@ -94,12 +95,16 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
     depends_on:
-      - airflow-init
-      - airflow-db
-      - prices-db
+      airflow-init:
+        condition: service_completed_successfully
+      airflow-db:
+        condition: service_healthy
+      prices-db:
+        condition: service_healthy
     restart: always
 
   # --- Airflow DB initialization & user setup ---
+  # Runs once; webserver and scheduler wait for it to exit successfully.
   airflow-init:
     image: apache/airflow:2.8.1
     container_name: airflow-init
@@ -107,7 +112,8 @@ services:
     command:
       - -c
       - |
-        airflow db init
+        set -e
+        airflow db migrate
         airflow users create \
           --username airflow \
           --password airflow \
@@ -122,10 +128,6 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
     depends_on:
-      - airflow-db
-      - prices-db
+      airflow-db:
+        condition: service_healthy
     restart: "no"
-
-volumes:
-  pgdata_airflow:
-  pgdata_prices:

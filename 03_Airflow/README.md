@@ -275,7 +275,7 @@ This is especially useful in production pipelines where historical data consiste
 The DAG file is provided in the `solution/` folder.
 Once Airflow is running, copy it into the `airflow/dags/` directory. First time it does not automatically detect the dag, you need to run airflow init. 
 
-```airflow db init```
+```airflow db migrate```
 Or click run for airflow-init service in the running container from Docker Desktop 
 
 
