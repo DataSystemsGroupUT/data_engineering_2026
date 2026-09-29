@@ -2,20 +2,20 @@ services:
   # --- Airflow metadata database ---
   airflow-db:
     container_name: airflow-db
-    image: postgres:16.4
+    image: postgres:${POSTGRES_VERSION:-16.4}
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
-      PGUSER: airflow
-      PGPASSWORD: airflow
-      PGDATABASE: airflow
+      POSTGRES_USER: ${AIRFLOW_DB_USER:-airflow}
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD:-airflow}
+      POSTGRES_DB: ${AIRFLOW_DB_NAME:-airflow}
+      PGUSER: ${AIRFLOW_DB_USER:-airflow}
+      PGPASSWORD: ${AIRFLOW_DB_PASSWORD:-airflow}
+      PGDATABASE: ${AIRFLOW_DB_NAME:-airflow}
     ports:
-      - "5432:5432"
+      - "${AIRFLOW_DB_PORT:-5432}:5432"
     volumes:
       - ./pgdata_airflow:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 10s
       retries: 5
     restart: always
@@ -23,20 +23,23 @@ services:
   # --- Separate Postgres for price tracking ---
   prices-db:
     container_name: prices-db
-    image: postgres:16.4
+    image: postgres:${POSTGRES_VERSION:-16.4}
     environment:
-      POSTGRES_USER: prices_user
-      POSTGRES_PASSWORD: prices_pass
-      POSTGRES_DB: prices_db
-      PGUSER: prices_user
-      PGPASSWORD: prices_pass
-      PGDATABASE: prices_db
+      POSTGRES_USER: ${PRICES_DB_USER:-prices_user}
+      POSTGRES_PASSWORD: ${PRICES_DB_PASSWORD:-prices_pass}
+      POSTGRES_DB: ${PRICES_DB_NAME:-prices_db}
+      PGUSER: ${PRICES_DB_USER:-prices_user}
+      PGPASSWORD: ${PRICES_DB_PASSWORD:-prices_pass}
+      PGDATABASE: ${PRICES_DB_NAME:-prices_db}
     ports:
-      - "5433:5432"
+      - "${PRICES_DB_PORT:-5433}:5432"
     volumes:
       - ./pgdata_prices:/var/lib/postgresql/data
+      # Applied automatically the first time the database is created.
+      # To re-run it, remove ./pgdata_prices and bring the stack back up.
+      - ./solution/create_tables.sql:/docker-entrypoint-initdb.d/01_create_tables.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U prices_user -d prices_db"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       retries: 5
     restart: always
@@ -44,31 +47,37 @@ services:
   # --- pgAdmin UI for both databases ---
   pgadmin:
     container_name: airflow-pgadmin
-    image: elestio/pgadmin:REL-8_10
+    image: elestio/pgadmin:${PGADMIN_VERSION:-REL-8_10}
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
       CSRF_ENABLED: "False"
     ports:
-      - "5050:80"
+      - "${PGADMIN_PORT:-5050}:80"
     depends_on:
       - airflow-db
       - prices-db
 
   # --- Airflow Webserver ---
   airflow-webserver:
-    image: apache/airflow:2.8.1
+    image: apache/airflow:${AIRFLOW_VERSION:-2.8.1}
     container_name: airflow-webserver
     command: webserver
+    user: "50000:0"
     environment:
+      &airflow-common-env
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
-      AIRFLOW_CONN_PRICES_DB: postgresql+psycopg2://prices_user:prices_pass@prices-db:5432/prices_db
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER:-airflow}:${AIRFLOW_DB_PASSWORD:-airflow}@airflow-db:5432/${AIRFLOW_DB_NAME:-airflow}
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
+      # Connection used by the DAGs via PostgresHook(postgres_conn_id="prices_db").
+      # The postgres:// scheme is what the Postgres provider expects (not postgresql+psycopg2://).
+      AIRFLOW_CONN_PRICES_DB: postgres://${PRICES_DB_USER:-prices_user}:${PRICES_DB_PASSWORD:-prices_pass}@prices-db:5432/${PRICES_DB_NAME:-prices_db}
+      _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-postgres requests"
     ports:
-      - "8080:8080"
+      - "${AIRFLOW_WEB_PORT:-8080}:8080"
     volumes:
+      &airflow-common-volumes
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./data/orders:/tmp/data/orders
@@ -82,18 +91,16 @@ services:
     restart: always
 
   # --- Airflow Scheduler ---
+  # With LocalExecutor the scheduler runs the tasks, so it needs the same
+  # mounts as the webserver -- including ./data/orders, where the DAG writes
+  # the order JSON files the sensor exercise picks up.
   airflow-scheduler:
-    image: apache/airflow:2.8.1
+    image: apache/airflow:${AIRFLOW_VERSION:-2.8.1}
     container_name: airflow-scheduler
     command: scheduler
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
-      AIRFLOW_CONN_PRICES_DB: postgresql+psycopg2://prices_user:prices_pass@prices-db:5432/prices_db
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
+    user: "50000:0"
+    environment: *airflow-common-env
+    volumes: *airflow-common-volumes
     depends_on:
       airflow-init:
         condition: service_completed_successfully
@@ -103,31 +110,46 @@ services:
         condition: service_healthy
     restart: always
 
-  # --- Airflow DB initialization & user setup ---
-  # Runs once; webserver and scheduler wait for it to exit successfully.
+  # --- Airflow DB initialization, user setup & connection registration ---
+  # Runs as root only to fix ownership of the bind mounts, then drops to the
+  # airflow user (uid 50000) -- Airflow is installed in that user's home, so
+  # the CLI is not importable under any other UID.
   airflow-init:
-    image: apache/airflow:2.8.1
+    image: apache/airflow:${AIRFLOW_VERSION:-2.8.1}
     container_name: airflow-init
     entrypoint: /bin/bash
+    user: "0:0"
     command:
       - -c
       - |
         set -e
-        airflow db migrate
-        airflow users create \
-          --username airflow \
-          --password airflow \
-          --firstname Admin \
-          --lastname User \
-          --role Admin \
-          --email admin@example.com
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
+        mkdir -p /opt/airflow/logs /opt/airflow/dags /tmp/data/orders
+        chown -R 50000:0 /opt/airflow/logs /opt/airflow/dags /tmp/data/orders
+        exec runuser -u airflow -- bash -euc "
+          airflow db migrate
+          airflow users create \
+            --username ${AIRFLOW_ADMIN_USER:-airflow} \
+            --password ${AIRFLOW_ADMIN_PASSWORD:-airflow} \
+            --firstname Admin --lastname User \
+            --role Admin --email ${AIRFLOW_ADMIN_EMAIL:-admin@example.com} || true
+          airflow connections delete prices_db 2>/dev/null || true
+          airflow connections add prices_db \
+            --conn-type postgres \
+            --conn-host prices-db \
+            --conn-port 5432 \
+            --conn-schema ${PRICES_DB_NAME:-prices_db} \
+            --conn-login ${PRICES_DB_USER:-prices_user} \
+            --conn-password ${PRICES_DB_PASSWORD:-prices_pass}
+          # FileSensor needs an fs connection. It normally ships as an example
+          # connection, but LOAD_EXAMPLES is off, so create it explicitly.
+          airflow connections delete fs_default 2>/dev/null || true
+          airflow connections add fs_default --conn-uri file:///
+        "
+    environment: *airflow-common-env
+    volumes: *airflow-common-volumes
     depends_on:
       airflow-db:
+        condition: service_healthy
+      prices-db:
         condition: service_healthy
     restart: "no"
