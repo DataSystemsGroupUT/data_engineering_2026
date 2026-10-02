@@ -1,133 +1,73 @@
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# Run from this folder: docker compose up -d --build
+# PostgreSQL holds both the lesson data and Superset's own saved dashboards.
+# The two databases are separate, but share one small PostgreSQL container.
+x-superset-image: &superset-image
+  image: course-superset-postgres:6.1.0
+  build: ./superset
 
-# -----------------------------------------------------------------------
-# We don't support docker compose for production environments.
-# If you choose to use this type of deployment make sure to
-# create you own docker environment file (docker/.env) with your own
-# unique random secure passwords and SECRET_KEY.
-#
-# For verbose logging during development:
-# - Set SUPERSET_LOG_LEVEL=debug in docker/.env-local for detailed Superset logs
-# -----------------------------------------------------------------------
-x-superset-image: &superset-image apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
-x-superset-volumes:
-  &superset-volumes # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
-  - ./docker:/app/docker # optionally comment me out if having bash/r error - will need to manually install clickhouse_connect on Superset container
-  - ./superset-core:/app/superset-core # optionally comment me out if having bash/r error - will need to manually install clickhouse_connect on Superset container
-  - superset_home:/app/superset_home
+x-superset-env: &superset-env
+  SUPERSET_CONFIG_PATH: /app/superset_config.py
+  SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:?Copy .env.example to .env first}
+  SUPERSET_META_URI: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/superset_meta
+  ADMIN_PASSWORD: ${SUPERSET_ADMIN_PASSWORD}
+  SUPERSET_LOAD_EXAMPLES: "no"
 
 services:
-  redis:
-    image: redis:7
-    container_name: superset_cache
-    volumes:
-      - redis:/data
-
   db:
-    env_file:
-      - path: docker/.env # default
-        required: true
-      - path: docker/.env-local # optional override
-        required: false
-    image: postgres:16
-    container_name: superset_db
+    image: postgres:16.4
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: superset_meta
+      VIZ_READER_PASSWORD: ${VIZ_READER_PASSWORD}
     volumes:
-      - db_home:/var/lib/postgresql/data
-      - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - ./db/seed:/lesson-seed:ro
+    healthcheck:
+      # TCP is available only after PostgreSQL has finished running seed SQL.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d viz_practice"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
-  superset:
-    env_file:
-      - path: docker/.env # default
-        required: true
-      - path: docker/.env-local # optional override
-        required: false
-    image: *superset-image
-    container_name: superset_app
-    command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
-    user: "root"
-    ports:
-      - 8088:8088
-    depends_on:
-      superset-init:
-        condition: service_completed_successfully
-    volumes: *superset-volumes
-
+  # This job runs migrations and creates the local admin account, then exits.
   superset-init:
-    image: *superset-image
-    container_name: superset_init
+    <<: *superset-image
+    environment: *superset-env
     command: ["/app/docker/docker-init.sh"]
-    env_file:
-      - path: docker/.env # default
-        required: true
-      - path: docker/.env-local # optional override
-        required: false
+    volumes:
+      - ./superset_config.py:/app/superset_config.py:ro
     depends_on:
       db:
-        condition: service_started
-      redis:
-        condition: service_started
-    user: "root"
-    volumes: *superset-volumes
+        condition: service_healthy
     healthcheck:
       disable: true
 
-  superset-worker:
-    image: *superset-image
-    container_name: superset_worker
-    command: ["/app/docker/docker-bootstrap.sh", "worker"]
-    env_file:
-      - path: docker/.env # default
-        required: true
-      - path: docker/.env-local # optional override
-        required: false
+  superset:
+    <<: *superset-image
+    environment: *superset-env
+    volumes:
+      - ./superset_config.py:/app/superset_config.py:ro
+    ports:
+      - "127.0.0.1:${SUPERSET_PORT:-8088}:8088"
     depends_on:
       superset-init:
         condition: service_completed_successfully
-    user: "root"
-    volumes: *superset-volumes
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "celery -A superset.tasks.celery_app:app inspect ping -d celery@$$HOSTNAME",
-        ]
 
-  superset-worker-beat:
-    image: *superset-image
-    container_name: superset_worker_beat
-    command: ["/app/docker/docker-bootstrap.sh", "beat"]
-    env_file:
-      - path: docker/.env # default
-        required: true
-      - path: docker/.env-local # optional override
-        required: false
+  streamlit:
+    build: ./streamlit
+    environment:
+      DB_HOST: db
+      DB_NAME: viz_practice
+      DB_USER: viz_reader
+      DB_PASSWORD: ${VIZ_READER_PASSWORD}
+      STREAMLIT_SERVER_FILE_WATCHER_TYPE: poll
+    volumes:
+      # A saved edit to app.py appears in the running app without rebuilding.
+      - ./streamlit/app.py:/app/app.py:ro
+    ports:
+      - "127.0.0.1:${STREAMLIT_PORT:-8501}:8501"
     depends_on:
-      superset-init:
-        condition: service_completed_successfully
-    user: "root"
-    volumes: *superset-volumes
-    healthcheck:
-      disable: true
-
-volumes:
-  superset_home:
-    external: false
-  db_home:
-    external: false
-  redis:
-    external: false
+      db:
+        condition: service_healthy
