@@ -23,6 +23,28 @@ services:
     restart: always
 
   # ---------------------------------------------------------------------------
+  # dbt — lightweight container for running dbt commands manually.
+  # Students use:  docker compose run --rm dbt <command>
+  # e.g.           docker compose run --rm dbt seed
+  #                docker compose run --rm dbt run --selector staging_models
+  # The ENTRYPOINT is "dbt" so the subcommand is passed directly.
+  # ---------------------------------------------------------------------------
+  dbt:
+    build:
+      context: .
+      dockerfile: dbt.Dockerfile
+    container_name: dbt
+    volumes:
+      - ./dbt_project:/dbt
+    environment:
+      DBT_PROJECT_DIR: /dbt
+      DBT_PROFILES_DIR: /dbt
+    depends_on:
+      retail-db:
+        condition: service_healthy
+    restart: "no"
+
+  # ---------------------------------------------------------------------------
   # Airflow metadata database
   # ---------------------------------------------------------------------------
   airflow-db:

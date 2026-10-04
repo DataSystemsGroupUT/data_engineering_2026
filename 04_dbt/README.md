@@ -31,7 +31,9 @@ PostgreSQL (retail-db, port 5434)
   └── schema: public      ← staging + mart models materialised here
   └── schema: snapshots   ← dbt snapshot writes here
 
-Airflow (port 8080)
+dbt container             ← students run all dbt commands here (Steps 2–7)
+
+Airflow (port 8080)       ← orchestrates the full pipeline (Step 8)
   └── DAG: dbt_pipeline
         dbt_seed → dbt_run_staging → dbt_run_marts → dbt_test → dbt_snapshot
 ```
@@ -58,8 +60,8 @@ docker compose build        # build the custom Airflow image with dbt pre-instal
 docker compose up -d        # start all services in the background
 ```
 
-The first `docker compose build` takes 2–3 minutes (downloads and installs dbt
-into the Airflow image). Subsequent starts are fast.
+The first `docker compose build` takes 2–3 minutes (builds two images: a
+lightweight dbt image and the Airflow image). Subsequent starts are fast.
 
 ### 2. Wait for Airflow to be ready
 
@@ -79,6 +81,7 @@ If `dbt-airflow-init` shows `exited (0)` that is correct — it exits after fini
 
 | Service       | URL / connection               | Credentials                 |
 |---------------|--------------------------------|-----------------------------|
+| dbt           | `docker compose run --rm dbt`  | —                           |
 | Airflow UI    | http://localhost:8080           | airflow / airflow           |
 | pgAdmin       | http://localhost:5051           | admin@example.com / admin   |
 | retail-db     | host `localhost`, port `5434`  | retail_user / retail_pass   |
@@ -174,8 +177,7 @@ Open `dbt_project/seeds/` and read the five CSV files. Answer these questions:
 ### Step 2 — Load seeds into the database
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt seed --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt seed
 ```
 
 In pgAdmin, expand `retail_db → Schemas → public_raw → Tables`.
@@ -199,15 +201,13 @@ Complete them in this order:
 Run the staging layer to check your work:
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt run --selector staging_models --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt run --selector staging_models
 ```
 
 Run tests for the staging layer:
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt test --selector staging_models --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt test --selector staging_models
 ```
 
 Fix any failures before moving on.
@@ -229,8 +229,7 @@ Each file has `TODO` comments explaining exactly what columns to include.
 Run the marts layer:
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt run --selector mart_models --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt run --selector mart_models
 ```
 
 ---
@@ -238,8 +237,7 @@ docker compose exec airflow-scheduler \
 ### Step 5 — Run data quality tests 🔍
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt test --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt test
 ```
 
 Tests are defined in two files:
@@ -267,8 +265,7 @@ Three selectors are defined: `staging_models`, `mart_models`, `all_models`.
 Run all models in one command using `all_models`:
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt run --selector all_models --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt run --selector all_models
 ```
 
 > **Why selectors?**
@@ -283,8 +280,7 @@ docker compose exec airflow-scheduler \
 Run the snapshot:
 
 ```bash
-docker compose exec airflow-scheduler \
-    dbt snapshot --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt snapshot
 ```
 
 Read `dbt_project/snapshots/dim_customer_snapshot.sql` to understand how it works.
@@ -342,16 +338,13 @@ cp data/raw_customers_update.csv dbt_project/seeds/raw_customers.csv
 
 ```bash
 # 1. Reload the seed table with the updated customer data
-docker compose exec airflow-scheduler \
-    dbt seed --full-refresh --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt seed --full-refresh
 
 # 2. Re-run staging so stg_customers reflects the new updated_date values
-docker compose exec airflow-scheduler \
-    dbt run --selector staging_models --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt run --selector staging_models
 
 # 3. Run the snapshot — it will detect changed rows and write history
-docker compose exec airflow-scheduler \
-    dbt snapshot --project-dir /dbt --profiles-dir /dbt
+docker compose run --rm dbt snapshot
 ```
 
 `--full-refresh` drops and recreates the seed table so updated rows replace the originals.
