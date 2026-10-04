@@ -1,4 +1,4 @@
-# dbt Practice — Data Transformation with dbt and PostgreSQL
+# 🏗️ dbt Practice — Data Transformation with dbt and PostgreSQL
 
 Practice session for the University of Tartu Data Engineering course.
 
@@ -8,7 +8,7 @@ SCD Type 2 snapshots, and orchestrate the pipeline with **Apache Airflow**.
 
 ---
 
-## Learning objectives
+## 🎯 Learning objectives
 
 By the end of this session you will be able to:
 
@@ -23,7 +23,7 @@ By the end of this session you will be able to:
 
 ---
 
-## Architecture
+## 🏛️ Architecture
 
 ```
 PostgreSQL (retail-db, port 5434)
@@ -38,7 +38,7 @@ Airflow (port 8080)
 
 ---
 
-## Prerequisites
+## ✅ Prerequisites
 
 - Docker Desktop, Colima, or Docker Engine + Compose plugin
 - ~4 GB RAM available to Docker
@@ -46,11 +46,11 @@ Airflow (port 8080)
 
 ---
 
-## Setup
+## 🚀 Setup
 
 ### 1. Build and start the stack
 
-Run these commands from the `05_dbt/` directory:
+Run these commands from the `04_dbt/` directory:
 
 ```bash
 cp .env_example .env        # copy environment defaults (no edits needed)
@@ -64,7 +64,7 @@ into the Airflow image). Subsequent starts are fast.
 ### 2. Wait for Airflow to be ready
 
 Airflow runs a one-off initialisation container (`airflow-init`) that migrates
-the metadata database and creates the admin user.  This takes about 30–60 seconds.
+the metadata database and creates the admin user. This takes about 30–60 seconds.
 
 Check that all containers are healthy:
 
@@ -104,7 +104,7 @@ In pgAdmin → Object → Register → Server:
 
 ---
 
-## Data model
+## 📊 Data model
 
 The source data lives in `dbt_project/seeds/` as CSV files.
 These simulate a production OLTP database (one row per business event — no
@@ -133,7 +133,7 @@ Grain of `fact_sales`: **one row per order line item** (one product in one order
 
 ---
 
-## Project structure
+## 📁 Project structure
 
 ```
 dbt_project/
@@ -155,7 +155,7 @@ dbt_project/
 
 ---
 
-## Step-by-step exercises
+## 🧪 Step-by-step exercises
 
 Work through the steps in order — each one builds on the previous.
 
@@ -163,7 +163,7 @@ Work through the steps in order — each one builds on the previous.
 
 ### Step 1 — Explore the seed data
 
-Open `dbt_project/seeds/` and read the five CSV files.  Answer these questions:
+Open `dbt_project/seeds/` and read the five CSV files. Answer these questions:
 
 - What is the natural key (business identifier) of each table?
 - Which columns would you rename or cast to a different type?
@@ -235,7 +235,7 @@ docker compose exec dbt-airflow-scheduler \
 
 ---
 
-### Step 5 — Run data quality tests
+### Step 5 — Run data quality tests 🔍
 
 ```bash
 docker compose exec dbt-airflow-scheduler \
@@ -278,7 +278,7 @@ docker compose exec dbt-airflow-scheduler \
 
 ---
 
-### Step 7 — Take a snapshot (SCD Type 2)
+### Step 7 — Take a snapshot (SCD Type 2) 📸
 
 Run the snapshot:
 
@@ -297,7 +297,7 @@ The columns `dbt_valid_from` and `dbt_valid_to` are added automatically by dbt.
 
 ---
 
-### Step 8 — Trigger the full pipeline from Airflow
+### Step 8 — Trigger the full pipeline from Airflow 🌀
 
 1. Open the Airflow UI: http://localhost:8080  (airflow / airflow)
 2. Find the DAG **`dbt_pipeline`**
@@ -315,7 +315,7 @@ Click any green task → **Log** to see the full dbt output for that step.
 
 ---
 
-## Appendix: SCD Type 2 — tracking customer changes
+## 📖 Appendix: SCD Type 2 — tracking customer changes
 
 This exercise simulates a business event where two customers update their
 profile, and you observe how the snapshot captures the history.
@@ -398,7 +398,7 @@ showing how a scheduled DAG keeps the dimensional model in sync with source chan
 
 ---
 
-## Stopping the stack
+## 🛑 Stopping the stack
 
 ```bash
 docker compose down
