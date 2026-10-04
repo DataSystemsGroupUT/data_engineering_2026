@@ -1,0 +1,21 @@
+selectors:
+  - name: staging_models
+    description: "Run all models in the staging layer."
+    definition:
+      method: path
+      value: models/staging
+
+  - name: mart_models
+    description: "Run all models in the marts layer."
+    definition:
+      method: path
+      value: models/marts
+
+  - name: all_models
+    description: "Run staging first, then marts (staging is a dependency of marts)."
+    definition:
+      union:
+        - method: path
+          value: models/staging
+        - method: path
+          value: models/marts

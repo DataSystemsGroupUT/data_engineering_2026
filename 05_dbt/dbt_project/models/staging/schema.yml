@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Cleaned customer records from the raw_customers seed table."
+    columns:
+      - name: customer_id
+        description: "Natural key from the source system."
+        data_tests:
+          - not_null
+          - unique
+      - name: email
+        data_tests:
+          - not_null
+      - name: segment
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["Regular", "VIP", "Premium"]
+      - name: updated_date
+        data_tests:
+          - not_null
+
+  - name: stg_products
+    description: "Cleaned product records from the raw_products seed table."
+    columns:
+      - name: product_id
+        data_tests:
+          - not_null
+          - unique
+      - name: unit_price
+        data_tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Cleaned order headers from the raw_orders seed table."
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_id
+        data_tests:
+          - not_null
+      - name: order_date
+        data_tests:
+          - not_null
+
+  - name: stg_order_items
+    description: "Cleaned order line items from the raw_order_items seed table."
+    columns:
+      - name: item_id
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+      - name: quantity
+        data_tests:
+          - not_null
+      - name: line_total
+        data_tests:
+          - not_null

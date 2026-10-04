@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "Customer dimension — current state (SCD Type 1)."
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+      - name: segment
+        data_tests:
+          - accepted_values:
+              values: ["Regular", "VIP", "Premium"]
+
+  - name: dim_product
+    description: "Product dimension — no history tracked."
+    columns:
+      - name: product_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: fact_sales
+    description: "Sales fact table — grain: one product line per order."
+    columns:
+      - name: item_id
+        description: "Unique identifier for the fact row."
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+      - name: line_total
+        data_tests:
+          - not_null
+      - name: order_date
+        data_tests:
+          - not_null
