@@ -5,4 +5,5 @@ RUN pip install --no-cache-dir \
     "dbt-postgres>=1.7,<2.0"
 
 WORKDIR /dbt
-ENTRYPOINT ["dbt"]
+# Keep the container running so students can exec into it
+CMD ["tail", "-f", "/dev/null"]

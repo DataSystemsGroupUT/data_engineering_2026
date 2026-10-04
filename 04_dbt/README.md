@@ -81,7 +81,7 @@ If `dbt-airflow-init` shows `exited (0)` that is correct — it exits after fini
 
 | Service       | URL / connection               | Credentials                 |
 |---------------|--------------------------------|-----------------------------|
-| dbt           | `docker compose run --rm dbt`  | —                           |
+| dbt           | `docker compose exec dbt dbt <cmd>` | —                           |
 | Airflow UI    | http://localhost:8080           | airflow / airflow           |
 | pgAdmin       | http://localhost:5051           | admin@example.com / admin   |
 | retail-db     | host `localhost`, port `5434`  | retail_user / retail_pass   |
@@ -177,7 +177,7 @@ Open `dbt_project/seeds/` and read the five CSV files. Answer these questions:
 ### Step 2 — Load seeds into the database
 
 ```bash
-docker compose run --rm dbt seed
+docker compose exec dbt dbt seed
 ```
 
 In pgAdmin, expand `retail_db → Schemas → public_raw → Tables`.
@@ -201,13 +201,13 @@ Complete them in this order:
 Run the staging layer to check your work:
 
 ```bash
-docker compose run --rm dbt run --selector staging_models
+docker compose exec dbt dbt run --selector staging_models
 ```
 
 Run tests for the staging layer:
 
 ```bash
-docker compose run --rm dbt test --selector staging_models
+docker compose exec dbt dbt test --selector staging_models
 ```
 
 Fix any failures before moving on.
@@ -229,7 +229,7 @@ Each file has `TODO` comments explaining exactly what columns to include.
 Run the marts layer:
 
 ```bash
-docker compose run --rm dbt run --selector mart_models
+docker compose exec dbt dbt run --selector mart_models
 ```
 
 ---
@@ -237,7 +237,7 @@ docker compose run --rm dbt run --selector mart_models
 ### Step 5 — Run data quality tests 🔍
 
 ```bash
-docker compose run --rm dbt test
+docker compose exec dbt dbt test
 ```
 
 Tests are defined in two files:
@@ -265,7 +265,7 @@ Three selectors are defined: `staging_models`, `mart_models`, `all_models`.
 Run all models in one command using `all_models`:
 
 ```bash
-docker compose run --rm dbt run --selector all_models
+docker compose exec dbt dbt run --selector all_models
 ```
 
 > **Why selectors?**
@@ -280,7 +280,7 @@ docker compose run --rm dbt run --selector all_models
 Run the snapshot:
 
 ```bash
-docker compose run --rm dbt snapshot
+docker compose exec dbt dbt snapshot
 ```
 
 Read `dbt_project/snapshots/dim_customer_snapshot.sql` to understand how it works.
@@ -338,13 +338,13 @@ cp data/raw_customers_update.csv dbt_project/seeds/raw_customers.csv
 
 ```bash
 # 1. Reload the seed table with the updated customer data
-docker compose run --rm dbt seed --full-refresh
+docker compose exec dbt dbt seed --full-refresh
 
 # 2. Re-run staging so stg_customers reflects the new updated_date values
-docker compose run --rm dbt run --selector staging_models
+docker compose exec dbt dbt run --selector staging_models
 
 # 3. Run the snapshot — it will detect changed rows and write history
-docker compose run --rm dbt snapshot
+docker compose exec dbt dbt snapshot
 ```
 
 `--full-refresh` drops and recreates the seed table so updated rows replace the originals.
