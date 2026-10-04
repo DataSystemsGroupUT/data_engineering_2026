@@ -1,0 +1,9 @@
+selectors:
+  - name: all_models
+    description: "Run all models in staging and marts folders using FQN"
+    definition:
+      union:
+        - method: fqn
+          value: staging
+        - method: fqn
+          value: marts

@@ -1,0 +1,9 @@
+# Generated dbt artifacts and logs
+/target/
+/logs/
+
+# Installed dbt packages
+/dbt_packages/
+
+# Local dbt telemetry identifier
+/.user.yml
