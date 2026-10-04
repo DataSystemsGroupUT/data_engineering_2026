@@ -1,0 +1,9 @@
+product_id,product_name,category,brand,unit_price
+1,Apple,Fruit,FreshFarm,1.20
+2,Banana,Fruit,Tropicana,0.80
+3,Whole Milk,Dairy,DairyBest,2.50
+4,White Bread,Bakery,BakeHouse,1.50
+5,Cheddar Cheese,Dairy,DairyBest,4.00
+6,Orange Juice,Beverage,FreshFarm,2.20
+7,Butter,Dairy,DairyBest,3.10
+8,Sourdough Bread,Bakery,BakeHouse,2.80

@@ -1,0 +1,9 @@
+customer_id,first_name,last_name,email,city,segment,created_at,updated_at
+1,Alice,Smith,alice.smith@mail.com,Tallinn,Regular,2024-01-10,2024-01-10
+2,Bob,Jones,bob.jones@mail.com,Tartu,VIP,2024-01-15,2024-01-15
+3,Carol,White,carol.white@mail.com,Tallinn,Regular,2024-02-01,2024-02-01
+4,David,Brown,david.brown@mail.com,Pärnu,Premium,2024-02-14,2024-02-14
+5,Eva,Green,eva.green@mail.com,Tartu,Regular,2024-03-05,2024-03-05
+6,Frank,Black,frank.black@mail.com,Tallinn,VIP,2024-03-20,2024-03-20
+7,Grace,Taylor,grace.taylor@mail.com,Narva,Regular,2024-04-02,2024-04-02
+8,Henry,Wilson,henry.wilson@mail.com,Tartu,Premium,2024-04-18,2024-04-18
