@@ -34,9 +34,21 @@ PostgreSQL (retail-db, port 5434)
 dbt container             ← students run all dbt commands here (Steps 2–7)
 
 Airflow (port 8080)       ← orchestrates the full pipeline (Step 8)
+  └── internal: airflow-db (port 5435) ← Airflow metadata only
   └── DAG: dbt_pipeline
         dbt_seed → dbt_run_staging → dbt_run_marts → dbt_test → dbt_snapshot
 ```
+
+### Databases
+
+There are two PostgreSQL 16 instances, kept intentionally separate:
+
+| Database | Port | Purpose |
+|---|---|---|
+| **retail-db** | 5434 | Your data — seeds, staging models, dims, facts, snapshots. This is what you browse in pgAdmin and query. |
+| **airflow-db** | 5435 | Airflow's internal metadata — DAG definitions, task run history, connections, logs. Students never interact with this directly. |
+
+**Why two databases?** In production, the orchestrator (Airflow) and the data warehouse (your analytical database) are always separate systems. Mixing them would mean Airflow's own bookkeeping tables live alongside your business data, making both harder to manage, back up, or scale independently. This setup mirrors that real-world separation at a small scale.
 
 ---
 
