@@ -49,7 +49,7 @@ There are two PostgreSQL 16 instances, kept intentionally separate:
 | Database | Port | Purpose |
 |---|---|---|
 | **retail-db** | 5434 | Your data — seeds, models, snapshots. This is what you browse in pgAdmin and query. |
-| **airflow-db** | 5435 | Airflow's internal metadata — DAG definitions, task run history, connections, logs. Students never interact with this directly. |
+| **airflow-db** | 5435 | Airflow's internal metadata — DAG definitions, task run history, connections, logs. We never interact with this directly. |
 
 **Why two databases?** In production, the orchestrator (Airflow) and the data warehouse are always separate systems. Mixing them would mean Airflow's own bookkeeping tables live alongside your business data, making both harder to manage, back up, or scale independently. This setup mirrors that real-world separation at a small scale.
 
