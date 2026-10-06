@@ -155,6 +155,10 @@ Seeds land in the `public_raw` schema (dbt appends the `raw` prefix to the defau
 
 This project follows a three-layer Medallion pattern:
 
+![Medallion Architecture](https://www.databricks.com/sites/default/files/inline-images/building-data-pipelines-with-delta-lake-120823.png)
+
+*Source: Databricks*
+
 ```
 Bronze   seeds/           raw_*         (public_raw schema — loaded by dbt seed)
          ↓
