@@ -50,6 +50,26 @@ There are two PostgreSQL 16 instances, kept intentionally separate:
 
 **Why two databases?** In production, the orchestrator (Airflow) and the data warehouse (your analytical database) are always separate systems. Mixing them would mean Airflow's own bookkeeping tables live alongside your business data, making both harder to manage, back up, or scale independently. This setup mirrors that real-world separation at a small scale.
 
+**Storage format — row-oriented (transactional) PostgreSQL**
+
+Both databases use standard PostgreSQL 16 with row-oriented (heap) storage. This means each row is stored together on disk — the default for transactional (OLTP) workloads where you insert, update, and delete individual records.
+
+`retail-db` holds the dbt output (dimensions and fact tables). For a small practice dataset this is fine. In the real world, the analytical target — the data warehouse — is often backed by **columnar storage**, where each column is stored separately. This layout is much faster for analytical queries that aggregate a few columns across millions of rows, because the engine only reads the columns it needs instead of every full row.
+
+Examples of columnar storage used in production:
+
+| System | Type |
+|---|---|
+| **Snowflake** | Cloud-native columnar data warehouse |
+| **BigQuery** (Google) | Columnar, serverless |
+| **Redshift** (AWS) | Columnar with distribution keys |
+| **ClickHouse** | Open-source columnar, fast aggregations (see `archive/05_ClickHouse`) |
+| **Citus columnar** | PostgreSQL extension — adds `USING columnar` tables to Postgres itself |
+| **DuckDB** | Embedded columnar database, popular for local analytics |
+| **Apache Iceberg + Parquet** | Open columnar file format, engine-agnostic (see `archive/08_Iceberg`) |
+
+The dbt skills you learn here transfer directly to any of these targets — you just change the adapter in `profiles.yml` (`type: snowflake`, `type: bigquery`, etc.).
+
 ---
 
 ## ✅ Prerequisites
