@@ -44,7 +44,7 @@ Airflow (port 8080)       ← orchestrates the full pipeline (Step 9)
 
 ### Databases
 
-There are two PostgreSQL 16 instances, kept intentionally separate:
+There are two PostgreSQL instances, kept intentionally separate:
 
 | Database | Port | Purpose |
 |---|---|---|
@@ -55,7 +55,7 @@ There are two PostgreSQL 16 instances, kept intentionally separate:
 
 **Storage format — row-oriented PostgreSQL**
 
-Both databases use standard PostgreSQL 16 with row-oriented (heap) storage — the default for transactional (OLTP) workloads. In the real world, the analytical target is often backed by **columnar storage**, where each column is stored separately, making aggregate queries much faster.
+Both databases use standard PostgreSQL 16.4 with row-oriented (heap) storage — the default for transactional (OLTP) workloads. In the real world, the analytical target is often backed by **columnar storage**, where each column is stored separately, making aggregate queries much faster.
 
 Examples of columnar storage used in production:
 
