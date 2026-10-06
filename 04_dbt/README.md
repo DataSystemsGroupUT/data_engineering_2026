@@ -325,21 +325,38 @@ The columns `dbt_valid_from` and `dbt_valid_to` are added automatically by dbt.
 
 ---
 
-### Step 8 — Trigger the full pipeline from Airflow 🌀
+## 🌀 Orchestrating with Airflow
 
-1. Open the Airflow UI: http://localhost:8080  (airflow / airflow)
-2. Find the DAG **`dbt_pipeline`**
-3. Toggle it on (unpause) using the switch on the left
-4. Click **Trigger DAG** (▶ button on the right)
-5. Click the DAG run row to watch the task graph
+The same steps you ran manually are wired up as a single DAG in Airflow.
 
-The five tasks run in sequence:
+Open the Airflow UI: **http://localhost:8080** (airflow / airflow)
 
+The DAG `dbt_pipeline` runs these tasks in order:
+
+| Task | Command |
+|---|---|
+| `dbt_seed` | `dbt seed` |
+| `dbt_run_staging` | `dbt run --selector staging_models` |
+| `dbt_run_marts` | `dbt run --selector mart_models` |
+| `dbt_test` | `dbt test` |
+| `dbt_snapshot` | `dbt snapshot` |
+
+**Trigger it:**
+1. Find `dbt_pipeline` in the DAG list
+2. Toggle it on (switch on the left)
+3. Click **▶ Trigger DAG**
+4. Click the run → watch tasks go green left to right
+5. Click any task → **Log** to see the dbt output
+
+**Schedule**
+
+The DAG is set to `schedule=None` — manual only. To run it on a schedule, change one line in `dags/dbt_pipeline.py`:
+
+```python
+schedule="@daily"        # every day at midnight
+schedule="0 6 * * 1"     # every Monday at 6am
+schedule="0 * * * *"     # every hour
 ```
-dbt_seed → dbt_run_staging → dbt_run_marts → dbt_test → dbt_snapshot
-```
-
-Click any green task → **Log** to see the full dbt output for that step.
 
 ---
 
