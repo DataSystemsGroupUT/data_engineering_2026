@@ -170,7 +170,7 @@ Gold     models/marts/    dim_*, fact_* (TABLE — final analytical output)
 ```
 
 ### Data flow
-
+```
 raw_customers   → stg_customers   → dim_customer
 raw_products    → stg_products    → dim_product
 raw_stores      → stg_stores
@@ -180,7 +180,7 @@ raw_orders      → stg_orders       ──┐
 raw_order_items → stg_order_items  ──┘
 
 fact_sales references: dim_customer, dim_product (FK)
-
+```
 Grain of `fact_sales`: **one row per order line item**.
 
 ---
