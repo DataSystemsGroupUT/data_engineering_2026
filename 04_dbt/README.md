@@ -54,7 +54,7 @@ There are two PostgreSQL 16 instances, kept intentionally separate:
 
 Both databases use standard PostgreSQL 16 with row-oriented (heap) storage. This means each row is stored together on disk — the default for transactional (OLTP) workloads where you insert, update, and delete individual records.
 
-`retail-db` holds the dbt output (dimensions and fact tables). For a small practice dataset this is fine. In the real world, the analytical target — the data warehouse — is often backed by **columnar storage**, where each column is stored separately. This layout is much faster for analytical queries that aggregate a few columns across millions of rows, because the engine only reads the columns it needs instead of every full row.
+`retail-db` holds the dbt output (dimensions and fact tables). For a small practice dataset this is fine. In the real world, the analytical target — the data warehouse — is often backed by **columnar storage**, where each column is stored separately. This layout is much faster for analytical queries that aggregate a few columns across millions/ billions/ trillions/ quadrillion of rows, because the engine only reads the columns it needs instead of every full row.
 
 Examples of columnar storage used in production:
 
