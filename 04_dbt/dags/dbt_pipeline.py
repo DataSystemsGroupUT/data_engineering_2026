@@ -4,8 +4,8 @@ Pipeline shape:
     dbt_seed → dbt_run_staging → dbt_run_marts → dbt_test → dbt_snapshot
 
 Each task runs a dbt CLI command via BashOperator.  dbt-core and dbt-postgres
-are pre-installed in this Airflow image through _PIP_ADDITIONAL_REQUIREMENTS
-in compose.yml.  The dbt project is mounted at /dbt.
+are pre-installed in the Airflow image (airflow.Dockerfile).  The dbt project
+is mounted at /dbt inside the scheduler container.
 
 Schedule: manual trigger only (schedule=None).  Run it from the Airflow UI or:
 
@@ -60,13 +60,13 @@ with DAG(
         task_id="dbt_seed",
         bash_command=f"dbt seed {DBT_FLAGS}",
         doc_md="""
-        Loads the CSV files from dbt_project/seeds/ into the `raw` schema
+        Loads the CSV files from dbt_project/seeds/ into the `public_raw` schema
         of retail-db:
-          - raw.raw_customers
-          - raw.raw_products
-          - raw.raw_stores
-          - raw.raw_orders
-          - raw.raw_order_items
+          - public_raw.raw_customers
+          - public_raw.raw_products
+          - public_raw.raw_stores
+          - public_raw.raw_orders
+          - public_raw.raw_order_items
         """,
     )
 

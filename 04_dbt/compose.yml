@@ -23,6 +23,29 @@ services:
     restart: always
 
   # ---------------------------------------------------------------------------
+  # dbt — lightweight container that stays running for the full session.
+  # Students exec into it to run dbt commands:
+  #   docker compose exec dbt dbt seed
+  #   docker compose exec dbt dbt run --selector staging_models
+  # ---------------------------------------------------------------------------
+  dbt:
+    build:
+      context: .
+      dockerfile: dbt.Dockerfile
+    container_name: dbt
+    volumes:
+      - ./dbt_project:/dbt
+    environment:
+      DBT_PROJECT_DIR: /dbt
+      DBT_PROFILES_DIR: /dbt
+    depends_on:
+      retail-db:
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+    restart: always
+
+  # ---------------------------------------------------------------------------
   # Airflow metadata database
   # ---------------------------------------------------------------------------
   airflow-db:
