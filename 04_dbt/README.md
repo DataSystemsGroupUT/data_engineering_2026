@@ -173,7 +173,7 @@ Gold     models/marts/    dim_*, fact_* (TABLE — final analytical output)
 ```
 raw_customers   → stg_customers   → dim_customer
 raw_products    → stg_products    → dim_product
-raw_stores      → stg_stores
+raw_stores      (store_id carried as FK in fact_sales)
 
 raw_orders      → stg_orders       ──┐
                                      ├──► int_order_lines ──► fact_sales
