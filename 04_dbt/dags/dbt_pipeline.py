@@ -77,22 +77,36 @@ with DAG(
         task_id="dbt_run_staging",
         bash_command=f"dbt run --selector staging_models {DBT_FLAGS}",
         doc_md="""
-        Runs only the staging layer models (selector: staging_models):
+        Runs the staging layer (selector: staging_models):
           - stg_customers, stg_products, stg_orders, stg_order_items
-        These clean and rename the raw seed tables.
+        Materialised as tables in the public schema.
         """,
     )
 
     # ------------------------------------------------------------------
-    # Step 3: Build mart models (dimensions and fact table)
+    # Step 3: Build intermediate models
+    # ------------------------------------------------------------------
+    dbt_run_intermediate = BashOperator(
+        task_id="dbt_run_intermediate",
+        bash_command=f"dbt run --selector intermediate_models {DBT_FLAGS}",
+        doc_md="""
+        Runs the intermediate layer (selector: intermediate_models):
+          - int_order_lines
+        Materialised as a VIEW ({{ config(materialized='view') }} overrides
+        the project default of table).
+        """,
+    )
+
+    # ------------------------------------------------------------------
+    # Step 4: Build mart models (dimensions and fact table)
     # ------------------------------------------------------------------
     dbt_run_marts = BashOperator(
         task_id="dbt_run_marts",
         bash_command=f"dbt run --selector mart_models {DBT_FLAGS}",
         doc_md="""
-        Runs only the marts layer (selector: mart_models):
+        Runs the marts layer (selector: mart_models):
           - dim_customer, dim_product, fact_sales
-        These join and aggregate the staging tables into a star schema.
+        fact_sales selects from int_order_lines (the join is already done).
         """,
     )
 
@@ -123,4 +137,4 @@ with DAG(
     )
 
     # Define execution order
-    dbt_seed >> dbt_run_staging >> dbt_run_marts >> dbt_test >> dbt_snapshot
+    dbt_seed >> dbt_run_staging >> dbt_run_intermediate >> dbt_run_marts >> dbt_test >> dbt_snapshot
