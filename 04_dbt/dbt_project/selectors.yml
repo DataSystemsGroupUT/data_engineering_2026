@@ -5,6 +5,12 @@ selectors:
       method: path
       value: models/staging
 
+  - name: intermediate_models
+    description: "Run all models in the intermediate layer."
+    definition:
+      method: path
+      value: models/intermediate
+
   - name: mart_models
     description: "Run all models in the marts layer."
     definition:
@@ -12,10 +18,12 @@ selectors:
       value: models/marts
 
   - name: all_models
-    description: "Run staging first, then marts (staging is a dependency of marts)."
+    description: "Run all layers — staging, intermediate, then marts."
     definition:
       union:
         - method: path
           value: models/staging
+        - method: path
+          value: models/intermediate
         - method: path
           value: models/marts
