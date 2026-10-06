@@ -4,7 +4,7 @@ services:
   # ---------------------------------------------------------------------------
   retail-db:
     container_name: retail-db
-    image: postgres:${POSTGRES_VERSION:-16}
+    image: postgres:${POSTGRES_VERSION:-16.4}
     environment:
       POSTGRES_USER: ${RETAIL_DB_USER:-retail_user}
       POSTGRES_PASSWORD: ${RETAIL_DB_PASSWORD:-retail_pass}
@@ -51,7 +51,7 @@ services:
   # ---------------------------------------------------------------------------
   airflow-db:
     container_name: dbt-airflow-db
-    image: postgres:${POSTGRES_VERSION:-16}
+    image: postgres:${POSTGRES_VERSION:-16.4}
     environment:
       POSTGRES_USER: ${AIRFLOW_DB_USER:-airflow}
       POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD:-airflow}
