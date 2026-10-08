@@ -1,34 +1,1886 @@
 [
   {
     "product_id": 1,
-    "name": "Running Shoes",
-    "category": "Footwear",
-    "price": 89.99,
+    "name": "Air Purifier",
+    "category": "Home",
+    "brand": "Hearthline",
+    "price": 199.59,
+    "stock": 42,
+    "tags": [
+      "clearance",
+      "sale",
+      "premium"
+    ],
+    "ratings": [
+      2.7
+    ],
     "attributes": {
-      "size": 42,
-      "weight": "0.9kg",
-      "color": "black"
+      "color": "blue",
+      "power_watts": 1200,
+      "warranty_months": 24
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "DE"
     }
   },
   {
     "product_id": 2,
+    "name": "Espresso Machine",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 624.47,
+    "stock": 15,
+    "tags": [
+      "premium",
+      "eco"
+    ],
+    "ratings": [
+      2.7,
+      3.3,
+      4.2,
+      3.8,
+      4.9
+    ],
+    "attributes": {
+      "color": "beige",
+      "power_watts": 900,
+      "warranty_months": 12
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 3,
+    "name": "Hiking Boots",
+    "category": "Footwear",
+    "brand": "Veloce",
+    "price": 137.26,
+    "stock": 0,
+    "tags": [
+      "new",
+      "premium"
+    ],
+    "ratings": [
+      3.1,
+      3.1,
+      2.7,
+      4.1
+    ],
+    "attributes": {
+      "size": 41,
+      "weight": "0.5kg",
+      "color": "black",
+      "material": "canvas"
+    },
+    "discontinued": true,
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 4,
+    "name": "Antivirus Plus",
+    "category": "Software",
+    "brand": "Bytewise",
+    "price": 49.77,
+    "stock": 60,
+    "tags": [
+      "premium",
+      "eco"
+    ],
+    "ratings": [
+      3.9,
+      2.7
+    ],
+    "attributes": {
+      "subscription_period": "1 month",
+      "platform": [
+        "Linux"
+      ],
+      "license_seats": 1
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 5,
+    "name": "Photo Editor Pro",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 204.04,
+    "stock": 60,
+    "tags": [
+      "clearance",
+      "eco",
+      "premium"
+    ],
+    "ratings": [
+      2.5,
+      3.2,
+      3.5,
+      3.1,
+      4.2,
+      3.4
+    ],
+    "attributes": {
+      "subscription_period": "24 months",
+      "platform": [
+        "Linux",
+        "macOS"
+      ],
+      "license_seats": 1
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 6,
+    "name": "Standing Desk",
+    "category": "Home",
+    "brand": "Hearthline",
+    "price": 692.4,
+    "stock": 8,
+    "tags": [
+      "premium"
+    ],
+    "ratings": [
+      2.7
+    ],
+    "attributes": {
+      "color": "grey",
+      "material": "steel",
+      "warranty_months": 24
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "EE"
+    }
+  },
+  {
+    "product_id": 7,
+    "name": "Noise-Cancelling Headphones",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 114.25,
+    "stock": 42,
+    "tags": [
+      "eco"
+    ],
+    "ratings": [
+      2.6
+    ],
+    "attributes": {
+      "color": "space grey",
+      "warranty_months": 24,
+      "connectivity": [
+        "HDMI"
+      ]
+    }
+  },
+  {
+    "product_id": 8,
     "name": "Laptop",
     "category": "Electronics",
-    "price": 1200.0,
+    "brand": "Lumenix",
+    "price": 660.64,
+    "stock": 0,
+    "tags": [
+      "premium"
+    ],
+    "ratings": [
+      3.8
+    ],
     "attributes": {
-      "processor": "Intel i7",
-      "ram": "16GB",
+      "color": "silver",
+      "warranty_months": 24,
+      "processor": "Intel i5",
+      "ram": "8GB",
       "storage": "512GB SSD"
     }
   },
   {
-    "product_id": 3,
-    "name": "Photo Editor Pro",
+    "product_id": 9,
+    "name": "Video Suite",
     "category": "Software",
-    "price": 59.99,
+    "brand": "Pixelcraft",
+    "price": 293.09,
+    "stock": 15,
+    "tags": [
+      "new",
+      "clearance"
+    ],
+    "ratings": [
+      3.7,
+      3.9,
+      4.2
+    ],
     "attributes": {
       "subscription_period": "12 months",
-      "platform": ["Windows", "macOS"]
+      "platform": [
+        "Linux"
+      ],
+      "license_seats": 1
+    },
+    "discontinued": true,
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "SE"
     }
+  },
+  {
+    "product_id": 10,
+    "name": "Camping Tent",
+    "category": "Outdoor",
+    "brand": "Basecamp",
+    "price": 109.63,
+    "stock": 60,
+    "tags": [
+      "premium",
+      "clearance"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "beige",
+      "weight": "1.9kg",
+      "season": "winter"
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 11,
+    "name": "Backpack 40L",
+    "category": "Outdoor",
+    "brand": "Summitgear",
+    "price": 135.12,
+    "stock": 8,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      3.1,
+      2.8,
+      4.6
+    ],
+    "attributes": {
+      "color": "red",
+      "weight": "0.6kg",
+      "season": "3-season"
+    }
+  },
+  {
+    "product_id": 12,
+    "name": "Wireless Mouse",
+    "category": "Electronics",
+    "brand": "Corvex",
+    "price": 25.54,
+    "stock": 42,
+    "tags": [
+      "clearance",
+      "sale",
+      "popular"
+    ],
+    "ratings": [
+      3.9,
+      2.5,
+      3.2
+    ],
+    "attributes": {
+      "color": "space grey",
+      "warranty_months": 24,
+      "connectivity": [
+        "HDMI",
+        "USB-C"
+      ]
+    }
+  },
+  {
+    "product_id": 13,
+    "name": "Headlamp",
+    "category": "Outdoor",
+    "brand": "Summitgear",
+    "price": 28.5,
+    "stock": 0,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      3.0,
+      3.5,
+      3.4,
+      3.4
+    ],
+    "attributes": {
+      "color": "red",
+      "weight": "2.8kg",
+      "season": "winter"
+    }
+  },
+  {
+    "product_id": 14,
+    "name": "USB-C Hub",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 85.37,
+    "stock": 42,
+    "tags": [
+      "clearance",
+      "sale"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 12,
+      "connectivity": [
+        "Wi-Fi",
+        "HDMI",
+        "Bluetooth"
+      ]
+    }
+  },
+  {
+    "product_id": 15,
+    "name": "Sandals",
+    "category": "Footwear",
+    "brand": "Northwalk",
+    "price": 58.98,
+    "stock": 0,
+    "tags": [
+      "clearance",
+      "new",
+      "popular"
+    ],
+    "ratings": [
+      4.1,
+      2.8,
+      3.6,
+      3.6,
+      4.9,
+      4.7
+    ],
+    "attributes": {
+      "size": 42,
+      "weight": "1.4kg",
+      "color": "navy",
+      "material": "leather"
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 16,
+    "name": "Air Purifier",
+    "category": "Home",
+    "brand": "Hearthline",
+    "price": 262.21,
+    "stock": 0,
+    "tags": [
+      "clearance",
+      "new",
+      "eco"
+    ],
+    "ratings": [
+      4.2
+    ],
+    "attributes": {
+      "color": "black",
+      "power_watts": 900,
+      "warranty_months": 24
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 17,
+    "name": "Tablet",
+    "category": "Electronics",
+    "brand": "Nordtech",
+    "price": 646.59,
+    "stock": 120,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      3.9,
+      4.8,
+      2.8,
+      4.7,
+      3.2,
+      4.7
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "processor": "AMD Ryzen 5",
+      "ram": "32GB",
+      "storage": "256GB SSD"
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "DE"
+    }
+  },
+  {
+    "product_id": 18,
+    "name": "Dress Shoes",
+    "category": "Footwear",
+    "brand": "Stride",
+    "price": 133.7,
+    "stock": 8,
+    "tags": [
+      "new",
+      "sale"
+    ],
+    "ratings": [
+      2.5,
+      3.5,
+      4.8
+    ],
+    "attributes": {
+      "size": 45,
+      "weight": "0.7kg",
+      "color": "beige",
+      "material": "mesh"
+    },
+    "discontinued": true
+  },
+  {
+    "product_id": 19,
+    "name": "Smartphone",
+    "category": "Electronics",
+    "brand": "Nordtech",
+    "price": 1144.31,
+    "stock": 0,
+    "tags": [
+      "sale",
+      "premium"
+    ],
+    "ratings": [
+      2.6,
+      4.0
+    ],
+    "attributes": {
+      "color": "white",
+      "warranty_months": 36,
+      "processor": "AMD Ryzen 5",
+      "ram": "16GB",
+      "storage": "1TB SSD"
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 20,
+    "name": "Backup Manager",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 82.23,
+    "stock": 3,
+    "tags": [
+      "popular"
+    ],
+    "ratings": [
+      4.5,
+      3.5,
+      4.8,
+      3.8,
+      4.6,
+      3.2
+    ],
+    "attributes": {
+      "subscription_period": "24 months",
+      "platform": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "license_seats": 5
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 21,
+    "name": "Trail Runners",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 150.64,
+    "stock": 42,
+    "tags": [
+      "eco",
+      "popular"
+    ],
+    "ratings": [
+      3.4
+    ],
+    "attributes": {
+      "size": 41,
+      "weight": "1.1kg",
+      "color": "white",
+      "material": "mesh"
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 22,
+    "name": "Laptop",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 1583.97,
+    "stock": 0,
+    "tags": [
+      "premium"
+    ],
+    "ratings": [
+      3.8,
+      4.6,
+      2.9
+    ],
+    "attributes": {
+      "color": "black",
+      "warranty_months": 12,
+      "processor": "Intel i5",
+      "ram": "32GB",
+      "storage": "256GB SSD"
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 23,
+    "name": "Antivirus Plus",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 57.43,
+    "stock": 8,
+    "tags": [
+      "new",
+      "premium"
+    ],
+    "ratings": [
+      4.1
+    ],
+    "attributes": {
+      "subscription_period": "24 months",
+      "platform": [
+        "Windows"
+      ],
+      "license_seats": 1
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 24,
+    "name": "Air Purifier",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 203.26,
+    "stock": 0,
+    "tags": [
+      "popular",
+      "premium"
+    ],
+    "ratings": [
+      2.7
+    ],
+    "attributes": {
+      "color": "red",
+      "power_watts": 1500,
+      "warranty_months": 24
+    }
+  },
+  {
+    "product_id": 25,
+    "name": "Office Bundle",
+    "category": "Software",
+    "brand": "Bytewise",
+    "price": 123.5,
+    "stock": 60,
+    "tags": [
+      "clearance",
+      "eco"
+    ],
+    "ratings": [
+      4.4,
+      2.6,
+      2.7,
+      3.1,
+      2.8,
+      4.4
+    ],
+    "attributes": {
+      "subscription_period": "1 month",
+      "platform": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "license_seats": 1
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 26,
+    "name": "Trekking Poles",
+    "category": "Outdoor",
+    "brand": "Wildpath",
+    "price": 111.17,
+    "stock": 120,
+    "tags": [
+      "premium"
+    ],
+    "ratings": [
+      3.9,
+      4.2,
+      3.5,
+      4.7
+    ],
+    "attributes": {
+      "color": "blue",
+      "weight": "3.1kg",
+      "season": "winter"
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 27,
+    "name": "Smartphone",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 1175.45,
+    "stock": 3,
+    "tags": [
+      "sale"
+    ],
+    "ratings": [
+      4.5,
+      4.7,
+      2.6,
+      4.3,
+      3.3,
+      4.8
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "processor": "Intel i7",
+      "ram": "32GB",
+      "storage": "256GB SSD"
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 28,
+    "name": "Electric Kettle",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 72.59,
+    "stock": 0,
+    "tags": [
+      "popular",
+      "eco"
+    ],
+    "ratings": [
+      3.0
+    ],
+    "attributes": {
+      "color": "red",
+      "power_watts": 1500,
+      "warranty_months": 12
+    }
+  },
+  {
+    "product_id": 29,
+    "name": "Backpack 40L",
+    "category": "Outdoor",
+    "brand": "Basecamp",
+    "price": 186.68,
+    "stock": 120,
+    "tags": [
+      "premium"
+    ],
+    "ratings": [
+      4.6,
+      3.2,
+      3.0,
+      4.3,
+      3.3
+    ],
+    "attributes": {
+      "color": "red",
+      "weight": "1.4kg",
+      "season": "summer"
+    }
+  },
+  {
+    "product_id": 30,
+    "name": "Hiking Boots",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 189.56,
+    "stock": 60,
+    "tags": [
+      "eco"
+    ],
+    "ratings": [
+      3.5,
+      2.7,
+      4.1,
+      3.4,
+      3.5,
+      4.7
+    ],
+    "attributes": {
+      "size": 38,
+      "weight": "1.1kg",
+      "color": "white",
+      "material": "leather"
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 31,
+    "name": "Electric Kettle",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 87.87,
+    "stock": 15,
+    "tags": [
+      "popular",
+      "new",
+      "eco"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "navy",
+      "power_watts": 1200,
+      "warranty_months": 24
+    }
+  },
+  {
+    "product_id": 32,
+    "name": "Code Editor Pro",
+    "category": "Software",
+    "brand": "Pixelcraft",
+    "price": 60.21,
+    "stock": 0,
+    "tags": [
+      "new",
+      "sale"
+    ],
+    "ratings": [
+      4.8,
+      3.2,
+      4.3
+    ],
+    "attributes": {
+      "subscription_period": "perpetual",
+      "platform": [
+        "macOS",
+        "Windows"
+      ],
+      "license_seats": 5
+    }
+  },
+  {
+    "product_id": 33,
+    "name": "Electric Kettle",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 30.86,
+    "stock": 42,
+    "tags": [
+      "popular"
+    ],
+    "ratings": [
+      2.8,
+      3.4,
+      4.4,
+      3.2
+    ],
+    "attributes": {
+      "color": "blue",
+      "power_watts": 1500,
+      "warranty_months": 12
+    }
+  },
+  {
+    "product_id": 34,
+    "name": "Desk Lamp",
+    "category": "Home",
+    "brand": "Nordhome",
+    "price": 68.74,
+    "stock": 120,
+    "tags": [
+      "premium",
+      "sale"
+    ],
+    "ratings": [
+      4.1,
+      4.6,
+      4.0
+    ],
+    "attributes": {
+      "color": "olive",
+      "material": "oak",
+      "warranty_months": 60
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 35,
+    "name": "Headlamp",
+    "category": "Outdoor",
+    "brand": "Summitgear",
+    "price": 29.43,
+    "stock": 0,
+    "tags": [
+      "new",
+      "popular",
+      "eco"
+    ],
+    "ratings": [
+      3.6,
+      4.0,
+      3.5,
+      3.0,
+      3.8
+    ],
+    "attributes": {
+      "color": "red",
+      "weight": "1.6kg",
+      "season": "3-season"
+    }
+  },
+  {
+    "product_id": 36,
+    "name": "Office Bundle",
+    "category": "Software",
+    "brand": "Bytewise",
+    "price": 127.08,
+    "stock": 60,
+    "tags": [
+      "popular",
+      "eco",
+      "clearance"
+    ],
+    "ratings": [
+      3.8,
+      3.6,
+      4.0,
+      4.7
+    ],
+    "attributes": {
+      "subscription_period": "24 months",
+      "platform": [
+        "macOS",
+        "Windows",
+        "Linux"
+      ],
+      "license_seats": 1
+    }
+  },
+  {
+    "product_id": 37,
+    "name": "Robot Vacuum",
+    "category": "Home",
+    "brand": "Nordhome",
+    "price": 588.16,
+    "stock": 0,
+    "tags": [
+      "clearance",
+      "eco",
+      "popular"
+    ],
+    "ratings": [
+      4.5,
+      4.0,
+      3.4,
+      4.1,
+      4.1,
+      4.2
+    ],
+    "attributes": {
+      "color": "navy",
+      "power_watts": 900,
+      "warranty_months": 12
+    }
+  },
+  {
+    "product_id": 38,
+    "name": "Portable SSD",
+    "category": "Electronics",
+    "brand": "Nordtech",
+    "price": 226.63,
+    "stock": 8,
+    "tags": [
+      "premium",
+      "clearance"
+    ],
+    "ratings": [
+      3.4,
+      2.6,
+      4.6,
+      3.0,
+      3.0
+    ],
+    "attributes": {
+      "color": "white",
+      "warranty_months": 24,
+      "connectivity": [
+        "Wi-Fi",
+        "HDMI"
+      ]
+    },
+    "discontinued": true,
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 39,
+    "name": "Desk Lamp",
+    "category": "Home",
+    "brand": "Nordhome",
+    "price": 42.95,
+    "stock": 8,
+    "tags": [
+      "new",
+      "eco",
+      "popular"
+    ],
+    "ratings": [
+      3.5,
+      2.8,
+      4.9,
+      3.3,
+      3.7
+    ],
+    "attributes": {
+      "color": "white",
+      "material": "steel",
+      "warranty_months": 24
+    }
+  },
+  {
+    "product_id": 40,
+    "name": "Backup Manager",
+    "category": "Software",
+    "brand": "Bytewise",
+    "price": 99.18,
+    "stock": 3,
+    "tags": [
+      "new",
+      "sale"
+    ],
+    "ratings": [
+      4.9,
+      3.3,
+      2.8,
+      4.6
+    ],
+    "attributes": {
+      "subscription_period": "1 month",
+      "platform": [
+        "macOS",
+        "Windows",
+        "Linux"
+      ],
+      "license_seats": 5
+    }
+  },
+  {
+    "product_id": 41,
+    "name": "Noise-Cancelling Headphones",
+    "category": "Electronics",
+    "brand": "Corvex",
+    "price": 231.09,
+    "stock": 15,
+    "tags": [
+      "eco",
+      "new"
+    ],
+    "ratings": [
+      3.3,
+      4.2,
+      3.5
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "connectivity": [
+        "Bluetooth"
+      ]
+    }
+  },
+  {
+    "product_id": 42,
+    "name": "Running Shoes",
+    "category": "Footwear",
+    "brand": "Veloce",
+    "price": 103.66,
+    "stock": 120,
+    "tags": [
+      "sale",
+      "eco"
+    ],
+    "ratings": [
+      3.2,
+      4.7,
+      4.4,
+      2.9
+    ],
+    "attributes": {
+      "size": 44,
+      "weight": "0.7kg",
+      "color": "navy",
+      "material": "mesh"
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 43,
+    "name": "Robot Vacuum",
+    "category": "Home",
+    "brand": "Hearthline",
+    "price": 698.69,
+    "stock": 60,
+    "tags": [
+      "sale"
+    ],
+    "ratings": [
+      3.9,
+      3.9,
+      5.0
+    ],
+    "attributes": {
+      "color": "olive",
+      "power_watts": 900,
+      "warranty_months": 24
+    }
+  },
+  {
+    "product_id": 44,
+    "name": "Running Shoes",
+    "category": "Footwear",
+    "brand": "Veloce",
+    "price": 91.53,
+    "stock": 27,
+    "tags": [
+      "popular",
+      "new",
+      "eco"
+    ],
+    "ratings": [
+      2.8,
+      4.8,
+      2.7,
+      3.2
+    ],
+    "attributes": {
+      "size": 43,
+      "weight": "1.0kg",
+      "color": "white",
+      "material": "leather"
+    }
+  },
+  {
+    "product_id": 45,
+    "name": "Mechanical Keyboard",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 113.87,
+    "stock": 8,
+    "tags": [
+      "clearance",
+      "eco",
+      "premium"
+    ],
+    "ratings": [
+      3.1,
+      4.1,
+      2.5
+    ],
+    "attributes": {
+      "color": "black",
+      "warranty_months": 24,
+      "connectivity": [
+        "USB-C"
+      ]
+    }
+  },
+  {
+    "product_id": 46,
+    "name": "Leather Boots",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 195.3,
+    "stock": 0,
+    "tags": [
+      "new"
+    ],
+    "ratings": [
+      3.3,
+      3.2,
+      3.0,
+      4.9,
+      4.7,
+      3.3
+    ],
+    "attributes": {
+      "size": 45,
+      "weight": "0.8kg",
+      "color": "beige",
+      "material": "mesh"
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "DE"
+    }
+  },
+  {
+    "product_id": 47,
+    "name": "Wireless Mouse",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 53.97,
+    "stock": 0,
+    "tags": [
+      "premium",
+      "sale",
+      "popular"
+    ],
+    "ratings": [
+      2.7,
+      4.2,
+      3.3
+    ],
+    "attributes": {
+      "color": "white",
+      "warranty_months": 12,
+      "connectivity": [
+        "Wi-Fi",
+        "HDMI",
+        "USB-C"
+      ]
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "DE"
+    }
+  },
+  {
+    "product_id": 48,
+    "name": "Antivirus Plus",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 29.12,
+    "stock": 0,
+    "tags": [
+      "eco",
+      "premium"
+    ],
+    "ratings": [
+      3.2,
+      3.1,
+      4.3
+    ],
+    "attributes": {
+      "subscription_period": "perpetual",
+      "platform": [
+        "Linux"
+      ],
+      "license_seats": 1
+    }
+  },
+  {
+    "product_id": 49,
+    "name": "USB-C Hub",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 70.97,
+    "stock": 42,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      4.9,
+      3.2,
+      4.5,
+      3.8
+    ],
+    "attributes": {
+      "color": "space grey",
+      "warranty_months": 24,
+      "connectivity": [
+        "Wi-Fi",
+        "USB-C"
+      ]
+    }
+  },
+  {
+    "product_id": 50,
+    "name": "Desk Lamp",
+    "category": "Home",
+    "brand": "Aerra",
+    "price": 26.94,
+    "stock": 27,
+    "tags": [
+      "clearance",
+      "popular",
+      "new"
+    ],
+    "ratings": [
+      3.2,
+      4.9,
+      4.9
+    ],
+    "attributes": {
+      "color": "beige",
+      "material": "oak",
+      "warranty_months": 24
+    }
+  },
+  {
+    "product_id": 51,
+    "name": "Laptop",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 1423.23,
+    "stock": 42,
+    "tags": [
+      "premium",
+      "clearance",
+      "popular"
+    ],
+    "ratings": [
+      3.0,
+      4.3
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "processor": "Apple M3",
+      "ram": "8GB",
+      "storage": "1TB SSD"
+    }
+  },
+  {
+    "product_id": 52,
+    "name": "Office Bundle",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 146.32,
+    "stock": 0,
+    "tags": [
+      "popular",
+      "premium",
+      "new"
+    ],
+    "ratings": [
+      4.4,
+      3.7,
+      4.1,
+      4.8,
+      3.0,
+      4.0
+    ],
+    "attributes": {
+      "subscription_period": "perpetual",
+      "platform": [
+        "macOS"
+      ],
+      "license_seats": 1
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "SE"
+    }
+  },
+  {
+    "product_id": 53,
+    "name": "USB-C Hub",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 47.56,
+    "stock": 42,
+    "tags": [
+      "popular",
+      "new",
+      "clearance"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "space grey",
+      "warranty_months": 24,
+      "connectivity": [
+        "HDMI"
+      ]
+    }
+  },
+  {
+    "product_id": 54,
+    "name": "Mechanical Keyboard",
+    "category": "Electronics",
+    "brand": "Corvex",
+    "price": 145.64,
+    "stock": 15,
+    "tags": [
+      "clearance",
+      "premium",
+      "popular"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "connectivity": [
+        "USB-C"
+      ]
+    },
+    "discontinued": true,
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "EE"
+    }
+  },
+  {
+    "product_id": 55,
+    "name": "Hiking Boots",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 124.11,
+    "stock": 60,
+    "tags": [
+      "sale",
+      "popular",
+      "eco"
+    ],
+    "ratings": [
+      4.8
+    ],
+    "attributes": {
+      "size": 41,
+      "weight": "1.1kg",
+      "color": "blue",
+      "material": "canvas"
+    }
+  },
+  {
+    "product_id": 56,
+    "name": "Sneakers",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 89.85,
+    "stock": 3,
+    "tags": [
+      "sale",
+      "popular"
+    ],
+    "ratings": [
+      3.1,
+      4.8,
+      3.6
+    ],
+    "attributes": {
+      "size": 39,
+      "weight": "0.5kg",
+      "color": "black",
+      "material": "leather"
+    }
+  },
+  {
+    "product_id": 57,
+    "name": "Camping Tent",
+    "category": "Outdoor",
+    "brand": "Summitgear",
+    "price": 395.15,
+    "stock": 120,
+    "tags": [
+      "sale",
+      "new"
+    ],
+    "ratings": [
+      4.7,
+      2.8,
+      3.4,
+      4.5,
+      4.0
+    ],
+    "attributes": {
+      "color": "black",
+      "weight": "0.8kg",
+      "season": "summer"
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 58,
+    "name": "Code Editor Pro",
+    "category": "Software",
+    "brand": "Clarity Labs",
+    "price": 79.77,
+    "stock": 0,
+    "tags": [
+      "popular"
+    ],
+    "ratings": [
+      2.8,
+      3.2,
+      4.7,
+      3.7
+    ],
+    "attributes": {
+      "subscription_period": "1 month",
+      "platform": [
+        "Linux",
+        "Windows",
+        "macOS"
+      ],
+      "license_seats": 1
+    }
+  },
+  {
+    "product_id": 59,
+    "name": "Noise-Cancelling Headphones",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 170.41,
+    "stock": 42,
+    "tags": [
+      "new",
+      "eco"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "black",
+      "warranty_months": 24,
+      "connectivity": [
+        "Bluetooth"
+      ]
+    }
+  },
+  {
+    "product_id": 60,
+    "name": "Trekking Poles",
+    "category": "Outdoor",
+    "brand": "Basecamp",
+    "price": 59.48,
+    "stock": 120,
+    "tags": [
+      "eco",
+      "new",
+      "premium"
+    ],
+    "ratings": [
+      4.1,
+      4.7,
+      3.9,
+      4.7,
+      3.6,
+      4.7
+    ],
+    "attributes": {
+      "color": "blue",
+      "weight": "1.3kg",
+      "season": "3-season"
+    }
+  },
+  {
+    "product_id": 61,
+    "name": "Trekking Poles",
+    "category": "Outdoor",
+    "brand": "Wildpath",
+    "price": 72.67,
+    "stock": 15,
+    "tags": [
+      "sale",
+      "eco"
+    ],
+    "ratings": [],
+    "attributes": {
+      "color": "white",
+      "weight": "2.9kg",
+      "season": "summer"
+    }
+  },
+  {
+    "product_id": 62,
+    "name": "Smartphone",
+    "category": "Electronics",
+    "brand": "Corvex",
+    "price": 1033.93,
+    "stock": 60,
+    "tags": [
+      "popular",
+      "sale"
+    ],
+    "ratings": [
+      2.6
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 24,
+      "processor": "AMD Ryzen 5",
+      "ram": "16GB",
+      "storage": "256GB SSD"
+    },
+    "supplier": {
+      "name": "EuroParts GmbH",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 63,
+    "name": "Tablet",
+    "category": "Electronics",
+    "brand": "Lumenix",
+    "price": 321.72,
+    "stock": 3,
+    "tags": [
+      "new",
+      "popular",
+      "sale"
+    ],
+    "ratings": [
+      2.8,
+      3.3,
+      4.7
+    ],
+    "attributes": {
+      "color": "black",
+      "warranty_months": 24,
+      "processor": "Intel i7",
+      "ram": "32GB",
+      "storage": "256GB SSD"
+    }
+  },
+  {
+    "product_id": 64,
+    "name": "Webcam",
+    "category": "Electronics",
+    "brand": "Corvex",
+    "price": 53.91,
+    "stock": 0,
+    "tags": [
+      "sale",
+      "clearance",
+      "premium"
+    ],
+    "ratings": [
+      4.2,
+      3.9,
+      3.0
+    ],
+    "attributes": {
+      "color": "white",
+      "warranty_months": 24,
+      "connectivity": [
+        "Bluetooth"
+      ]
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "EE"
+    }
+  },
+  {
+    "product_id": 65,
+    "name": "Tablet",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 412.23,
+    "stock": 0,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      4.6,
+      2.6,
+      3.3
+    ],
+    "attributes": {
+      "color": "silver",
+      "warranty_months": 36,
+      "processor": "AMD Ryzen 5",
+      "ram": "8GB",
+      "storage": "1TB SSD"
+    }
+  },
+  {
+    "product_id": 66,
+    "name": "4K Monitor",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 350.82,
+    "stock": 8,
+    "tags": [
+      "popular",
+      "premium",
+      "eco"
+    ],
+    "ratings": [
+      3.1,
+      3.6,
+      4.3,
+      3.1,
+      3.3
+    ],
+    "attributes": {
+      "color": "black",
+      "warranty_months": 12,
+      "connectivity": [
+        "USB-C"
+      ]
+    },
+    "supplier": {
+      "name": "Baltic Supply OU",
+      "country": "EE"
+    }
+  },
+  {
+    "product_id": 67,
+    "name": "Photo Editor Pro",
+    "category": "Software",
+    "brand": "Pixelcraft",
+    "price": 197.03,
+    "stock": 27,
+    "tags": [
+      "clearance"
+    ],
+    "ratings": [
+      4.9,
+      4.2,
+      3.0,
+      4.3
+    ],
+    "attributes": {
+      "subscription_period": "24 months",
+      "platform": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "license_seats": 1
+    }
+  },
+  {
+    "product_id": 68,
+    "name": "Mechanical Keyboard",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 66.52,
+    "stock": 8,
+    "tags": [
+      "eco"
+    ],
+    "ratings": [
+      4.5
+    ],
+    "attributes": {
+      "color": "white",
+      "warranty_months": 24,
+      "connectivity": [
+        "HDMI",
+        "Wi-Fi",
+        "USB-C"
+      ]
+    }
+  },
+  {
+    "product_id": 69,
+    "name": "Running Shoes",
+    "category": "Footwear",
+    "brand": "Veloce",
+    "price": 71.49,
+    "stock": 15,
+    "tags": [
+      "sale"
+    ],
+    "ratings": [
+      4.3
+    ],
+    "attributes": {
+      "size": 39,
+      "weight": "1.0kg",
+      "color": "black",
+      "material": "leather"
+    },
+    "discontinued": true
+  },
+  {
+    "product_id": 70,
+    "name": "Sandals",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 38.08,
+    "stock": 3,
+    "tags": [
+      "premium",
+      "new",
+      "popular"
+    ],
+    "ratings": [
+      2.5,
+      4.8,
+      4.7
+    ],
+    "attributes": {
+      "size": 42,
+      "weight": "0.6kg",
+      "color": "grey",
+      "material": "leather"
+    },
+    "discontinued": false
+  },
+  {
+    "product_id": 71,
+    "name": "Backup Manager",
+    "category": "Software",
+    "brand": "Bytewise",
+    "price": 95.29,
+    "stock": 8,
+    "tags": [
+      "sale",
+      "premium",
+      "eco"
+    ],
+    "ratings": [
+      4.6
+    ],
+    "attributes": {
+      "subscription_period": "perpetual",
+      "platform": [
+        "macOS"
+      ],
+      "license_seats": 5
+    }
+  },
+  {
+    "product_id": 72,
+    "name": "4K Monitor",
+    "category": "Electronics",
+    "brand": "Axion",
+    "price": 420.57,
+    "stock": 120,
+    "tags": [
+      "eco",
+      "new"
+    ],
+    "ratings": [
+      4.6
+    ],
+    "attributes": {
+      "color": "space grey",
+      "warranty_months": 12,
+      "connectivity": [
+        "HDMI",
+        "USB-C",
+        "Bluetooth"
+      ]
+    },
+    "supplier": {
+      "name": "Nordic Trade AB",
+      "country": "FI"
+    }
+  },
+  {
+    "product_id": 73,
+    "name": "Leather Boots",
+    "category": "Footwear",
+    "brand": "Stride",
+    "price": 218.75,
+    "stock": 42,
+    "tags": [
+      "sale",
+      "clearance"
+    ],
+    "ratings": [
+      3.7,
+      4.4,
+      4.7,
+      2.9
+    ],
+    "attributes": {
+      "size": 40,
+      "weight": "1.2kg",
+      "color": "blue",
+      "material": "leather"
+    }
+  },
+  {
+    "product_id": 74,
+    "name": "Video Suite",
+    "category": "Software",
+    "brand": "Pixelcraft",
+    "price": 241.59,
+    "stock": 3,
+    "tags": [
+      "new",
+      "clearance"
+    ],
+    "ratings": [
+      3.2,
+      4.9,
+      4.1,
+      4.4
+    ],
+    "attributes": {
+      "subscription_period": "1 month",
+      "platform": [
+        "Linux"
+      ],
+      "license_seats": 1
+    }
+  },
+  {
+    "product_id": 75,
+    "name": "Sleeping Bag",
+    "category": "Outdoor",
+    "brand": "Summitgear",
+    "price": 228.75,
+    "stock": 42,
+    "tags": [
+      "clearance",
+      "new"
+    ],
+    "ratings": [
+      4.3,
+      3.6,
+      4.7
+    ],
+    "attributes": {
+      "color": "red",
+      "weight": "2.2kg",
+      "season": "summer"
+    },
+    "discontinued": false
   }
 ]
