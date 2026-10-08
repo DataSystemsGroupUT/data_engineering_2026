@@ -70,48 +70,24 @@ By the end of this session, you will:
 ### Step 3.1: Project Structure
 
 ```
-07_MongoDB/
-├── compose.yml
+05_MongoDB/
+├── compose.yml          # MongoDB + Mongo Express services
+├── .env.example         # optional overrides (credentials, versions, ports)
 ├── sample_data/
-│   └── products.json
+│   └── products.json    # the product catalog you will import
 └── README.md
 ```
 
 ### Step 3.2: Docker Compose File
 
-```yaml
-version: "3.9"
+The environment is already defined in [`compose.yml`](compose.yml): a **mongodb**
+service (the database) and a **mongo-express** service (a web UI for browsing it).
 
-services:
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-      - ./sample_data:/sample_data
+Credentials and image versions come from environment variables with sensible
+defaults, so no setup file is required. To override them, copy the example:
 
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongodb
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
-    depends_on:
-      - mongodb
-
-volumes:
-  mongodb_data:
+```bash
+cp .env.example .env
 ```
 
 **Run the setup:**
@@ -120,16 +96,31 @@ volumes:
 docker compose up -d
 ```
 
+Mongo Express waits for MongoDB to pass its healthcheck, so the first start
+takes around 20 seconds. Check both services are up:
+
+```bash
+docker compose ps
+```
+
 ✅ Access the tools:
 
-- **Mongo Express UI:** http://localhost:8081  
-User: admin
-Password: pass
-- **MongoDB Shell (CLI):**
+- **Mongo Express UI:** <http://localhost:8081> — browser login `admin` / `pass`
+  (set by `ME_USER` / `ME_PASSWORD`; these are *not* the database credentials)
+- **MongoDB shell (CLI):**
 
   ```bash
   docker exec -it mongodb mongosh -u admin -p password --authenticationDatabase admin
   ```
+
+  `--authenticationDatabase admin` is required because the root user is created
+  in the `admin` database, not in `shop`.
+
+When you are finished, stop everything and discard the data volume:
+
+```bash
+docker compose down -v
+```
 
 ---
 
@@ -150,44 +141,17 @@ Password: pass
 
 ### Step 5.1: Sample Data
 
-`sample_data/products.json`
+Open [`sample_data/products.json`](sample_data/products.json). It holds a small
+product catalog — three documents, one per product.
 
-```json
-[
-  {
-    "product_id": 1,
-    "name": "Running Shoes",
-    "category": "Footwear",
-    "price": 89.99,
-    "attributes": {
-      "size": 42,
-      "weight": "0.9kg",
-      "color": "black"
-    }
-  },
-  {
-    "product_id": 2,
-    "name": "Laptop",
-    "category": "Electronics",
-    "price": 1200.0,
-    "attributes": {
-      "processor": "Intel i7",
-      "ram": "16GB",
-      "storage": "512GB SSD"
-    }
-  },
-  {
-    "product_id": 3,
-    "name": "Photo Editor Pro",
-    "category": "Software",
-    "price": 59.99,
-    "attributes": {
-      "subscription_period": "12 months",
-      "platform": ["Windows", "macOS"]
-    }
-  }
-]
-```
+Look at the `attributes` field in each one. A footwear product has `size`,
+`weight` and `color`; a laptop has `processor`, `ram` and `storage`; the software
+product has a `platform` **array**. Every document lives in the same collection
+even though no two share the same shape.
+
+This is the point of a document store: in a relational database these three
+products would need either three separate tables or one wide table full of
+`NULL`s. Here, each document carries only the fields that apply to it.
 
 ### Step 5.2: Load Data into MongoDB
 
@@ -283,7 +247,10 @@ db.products.aggregate([
 🎯 **Challenge 1: Discount Campaign**
 > Add a `discounted_price` field that applies a 10% discount to products over €100.
 
-💡 *Hint:* Use `$mul` and `$set` operators inside `updateMany()`.
+💡 *Hint:* Use `$set` with `$multiply` in an **aggregation pipeline update** —
+pass an array as the second argument to `updateMany()`. (A plain
+`$mul` cannot do this: it multiplies by a constant and cannot read
+another field's value.)
 
 <details>
 <summary>💡 Show Solution</summary>
