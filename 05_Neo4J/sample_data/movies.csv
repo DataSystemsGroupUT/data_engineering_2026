@@ -1,0 +1,41 @@
+movie_id,title,released,tagline,runtime,budget_musd,revenue_musd
+1,The Matrix,1999,Welcome to the Real World,154,120.3,628.6
+2,The Matrix Reloaded,2003,Free your mind,151,45.9,99.7
+3,The Matrix Revolutions,2003,Everything that has a beginning has an end,111,140.8,271.9
+4,Forrest Gump,1994,Life is like a box of chocolates,146,59.8,69.5
+5,Cast Away,2000,"At the edge of the world, his journey begins",126,154.0,893.0
+6,Sleepless in Seattle,1993,What if someone you never met was the one for you?,162,89.9,142.5
+7,You've Got Mail,1998,"At odds in life, in love on-line",137,59.2,32.1
+8,When Harry Met Sally,1989,Can two friends sleep together and still love each other?,135,56.0,294.2
+9,Apollo 13,1995,"Houston, we have a problem",116,82.1,323.5
+10,The Green Mile,1999,Walk a mile you'll never forget,139,73.3,243.3
+11,Cloud Atlas,2012,Everything is connected,128,166.1,341.6
+12,Speed,1994,Get ready for rush hour,142,23.2,44.6
+13,Point Break,1991,100% pure adrenaline,97,174.9,635.0
+14,The Devil's Advocate,1997,Evil has its winning ways,144,174.0,854.5
+15,A Few Good Men,1992,In the heart of the nation's capital,93,59.3,265.3
+16,Wall Street,1987,Every dream has a price,148,22.9,91.7
+17,The American President,1995,Why can't the most powerful man in the world have the one thing he wants most?,168,177.8,678.0
+18,The Shawshank Redemption,1994,Fear can hold you prisoner. Hope can set you free,165,78.7,74.9
+19,Se7en,1995,Seven deadly sins. Seven ways to die,91,157.1,864.8
+20,Bruce Almighty,2003,Be careful what you pray for,136,124.1,147.3
+21,Tallinn Nights,2015,The city never sleeps in summer,139,158.8,302.3
+22,The Baltic Run,2018,"One coast, three borders, no brakes",145,156.2,84.0
+23,Winter Harbour,2009,Some ports you never leave,153,105.4,254.4
+24,Paper Boats,2011,Small things carry far,99,159.5,112.2
+25,The Glass Orchard,2016,Nothing grows without light,117,61.1,248.6
+26,Signal Lost,2020,Silence travels faster,144,72.6,272.0
+27,Northern Lights,2006,Look up,134,95.8,604.5
+28,The Cartographer,2013,Every map is a choice,111,14.0,15.9
+29,Salt and Iron,2017,The sea keeps its debts,150,138.8,378.5
+30,Midsummer Shift,2019,"Clock out, come alive",146,52.2,256.0
+31,The Quiet Frequency,2021,Listen closer,93,16.0,27.8
+32,Amber Road,2014,"Trade routes, old ghosts",162,169.0,451.4
+33,Fault Lines,2008,The ground was never still,99,176.7,1063.4
+34,The Understudy,2012,Someone has to go on,139,162.9,407.9
+35,Low Tide,2010,What the water gives back,123,80.2,75.5
+36,Granite,2022,"Hard country, harder people",157,66.0,400.1
+37,The Lighthouse Keeper,2005,"One light, one promise",165,39.9,160.6
+38,Second Language,2018,"Love, badly translated",166,65.4,142.1
+39,The Long Thaw,2023,Everything frozen returns,145,97.0,439.4
+40,Crosswind,2016,"Blown off course, found at last",167,147.6,770.6

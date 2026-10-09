@@ -1,0 +1,70 @@
+services:
+  # ---------------------------------------------------------------------------
+  # Neo4j — the graph database. Students load the CSVs in sample_data/ into it
+  # and run all Cypher queries here, either in the Browser UI or cypher-shell.
+  #
+  # The image bundles both the server and the Browser UI, so unlike the MongoDB
+  # session there is no second service to run.
+  # ---------------------------------------------------------------------------
+  neo4j:
+    container_name: neo4j
+    image: neo4j:${NEO4J_VERSION:-5.26}
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"   # Browser UI
+      - "${NEO4J_BOLT_PORT:-7687}:7687"   # Bolt protocol (drivers, cypher-shell)
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-512M}
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP_MAX:-1G}
+      # APOC ships with the image but is not enabled by default. The core
+      # exercises do not need it; it is here so the optional ones can use it.
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - neo4j_data:/data
+      # LOAD CSV reads files from the server's filesystem, so the sample data
+      # must be mounted into the container's import directory, which is what
+      # `file:///` resolves against.
+      #
+      # Not mounted :ro -- the image's entrypoint chowns this directory on
+      # every start, and on a read-only mount that fails and the container
+      # crash-loops. The exercises never write here anyway.
+      - ./sample_data:/import
+    healthcheck:
+      # `cypher-shell` returns non-zero until the database is ready to accept
+      # queries, which is later than the port opening -- so this is the honest
+      # readiness signal.
+      test: ["CMD-SHELL", "cypher-shell -u ${NEO4J_USER:-neo4j} -p ${NEO4J_PASSWORD:-password} 'RETURN 1' || exit 1"]
+      interval: 10s
+      retries: 6
+      start_period: 30s
+    restart: always
+
+  # ---------------------------------------------------------------------------
+  # JupyterLab — runs the Practice.ipynb and Homework.ipynb notebooks.
+  #
+  # Ships the neo4j Python driver and pandas so students do not have to install
+  # anything on the host. The notebooks connect over Bolt using the service name
+  # `neo4j` (container-to-container), which is why NEO4J_URI is set here.
+  # ---------------------------------------------------------------------------
+  notebook:
+    container_name: neo4j-notebook
+    build:
+      context: .
+      dockerfile: notebook.Dockerfile
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-password}
+    volumes:
+      # Bind-mounted so edits students make are saved back to the repo folder.
+      - ./notebooks:/notebooks
+      - ./sample_data:/sample_data:ro
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  neo4j_data:
