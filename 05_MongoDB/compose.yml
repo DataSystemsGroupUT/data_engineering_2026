@@ -48,5 +48,30 @@ services:
         condition: service_healthy
     restart: always
 
+  # ---------------------------------------------------------------------------
+  # JupyterLab — runs the Practice.ipynb and Homework.ipynb notebooks.
+  #
+  # Ships pymongo and pandas so students do not have to install anything on the
+  # host. The notebooks connect using the service name `mongodb`
+  # (container-to-container), which is why MONGO_URI is set here.
+  # ---------------------------------------------------------------------------
+  notebook:
+    container_name: mongodb-notebook
+    build:
+      context: .
+      dockerfile: notebook.Dockerfile
+    ports:
+      - "${JUPYTER_PORT:-8889}:8888"
+    environment:
+      MONGO_URI: mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-password}@mongodb:27017/?authSource=admin
+    volumes:
+      # Bind-mounted so edits students make are saved back to the repo folder.
+      - ./notebooks:/notebooks
+      - ./sample_data:/sample_data:ro
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: always
+
 volumes:
   mongodb_data:

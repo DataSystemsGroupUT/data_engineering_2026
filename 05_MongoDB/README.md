@@ -75,8 +75,12 @@ By the end of this session, you will:
 
 ```
 05_MongoDB/
-├── compose.yml          # MongoDB + Mongo Express services
+├── compose.yml          # MongoDB + Mongo Express + JupyterLab services
+├── notebook.Dockerfile  # Jupyter image (pymongo + pandas preinstalled)
 ├── .env.example         # optional overrides (credentials, versions, ports)
+├── notebooks/
+│   ├── Practice.ipynb   # guided walkthrough (sections 5-8 from Python)
+│   └── Homework.ipynb   # graded assignment
 ├── sample_data/
 │   └── products.json    # the product catalog you will import
 └── README.md
@@ -85,7 +89,9 @@ By the end of this session, you will:
 ### Step 3.2: Docker Compose File
 
 The environment is already defined in [`compose.yml`](compose.yml): a **mongodb**
-service (the database) and a **mongo-express** service (a web UI for browsing it).
+service (the database), a **mongo-express** service (a web UI for browsing it),
+and a **notebook** service running JupyterLab with `pymongo` and pandas already
+installed, so you do not have to install anything on your host.
 
 Credentials and image versions come from environment variables with sensible
 defaults, so no setup file is required. To override them, copy the example:
@@ -100,8 +106,9 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Mongo Express waits for MongoDB to pass its healthcheck, so the first start
-takes around 20 seconds. Check both services are up:
+Mongo Express and JupyterLab both wait for MongoDB to pass its healthcheck, so
+the first start takes around 20 seconds — plus a couple of minutes the very first
+time, while the Jupyter image builds. Check the services are up:
 
 ```bash
 docker compose ps
@@ -111,6 +118,10 @@ docker compose ps
 
 - **Mongo Express UI:** <http://localhost:8081> — browser login `admin` / `pass`
   (set by `ME_USER` / `ME_PASSWORD`; these are *not* the database credentials)
+- **JupyterLab:** <http://localhost:8889> — no token required. Open
+  `Practice.ipynb` to work through this session from Python, or
+  `Homework.ipynb` for the assignment. (Port 8889, so it does not clash with the
+  Neo4j session's 8888.)
 - **MongoDB shell (CLI):**
 
   ```bash
@@ -142,6 +153,12 @@ docker compose down -v
 ---
 
 ## 5. Task 1: Load and Explore Product Data
+
+> 💡 Sections 5–8 are also available as a runnable notebook —
+> [`notebooks/Practice.ipynb`](notebooks/Practice.ipynb) — if you prefer to work
+> from Python and keep your results next to the queries. The operators are
+> identical; only the surrounding syntax differs (`{ price: { $lt: 50 } }` in the
+> shell becomes `{'price': {'$lt': 50}}` in Python).
 
 ### Step 5.1: Sample Data
 
@@ -498,6 +515,10 @@ db.products.dropIndex("category_1")              // drop by name
 
 ## 9. Challenge Tasks: Real-world Scenarios
 
+> 📓 The graded assignment is [`notebooks/Homework.ipynb`](notebooks/Homework.ipynb):
+> model a relational schema as documents and build it, then query the catalog.
+> Submit the notebook with its outputs saved.
+
 🎯 **Challenge 1: Discount Campaign**
 > Add a `discounted_price` field holding a 10% discount, for products over €100.
 
@@ -646,6 +667,9 @@ db.products.aggregate([
 | `mongoimport: file not found` | The path is the one *inside* the container: `/sample_data/products.json`. |
 | Collection is empty after import | You imported into a different database. `use shop` then `db.products.countDocuments()`. |
 | `find()` prints only 20 documents | That is the shell's page size. Type `it` for the next page. |
+| JupyterLab not reachable on 8889 | Check `docker compose ps`. The image builds on first start — watch `docker compose logs notebook`. Set `JUPYTER_PORT` in `.env` if 8889 is taken. |
+| Notebook: `ServerSelectionTimeoutError` | Inside Docker the URI uses host `mongodb` (set for you). Running on the host instead? Use `mongodb://admin:password@localhost:27017/?authSource=admin`. |
+| Notebook returns empty tables | The catalog is not imported. Run the `mongoimport` from Step 5.2 on the host. |
 | You deleted or mangled the data | `db.products.drop()`, then re-run the `mongoimport` from Step 5.2. |
 | Want a completely clean slate | `docker compose down -v` removes the data volume, then `docker compose up -d`. |
 
