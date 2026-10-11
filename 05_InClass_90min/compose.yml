@@ -1,0 +1,78 @@
+# =============================================================================
+# Combined 90-minute in-class environment: MongoDB + Neo4j side by side.
+#
+# This file runs BOTH databases at once so the class does not spend time
+# starting and stopping environments mid-session. Ports are the same as in the
+# full 05_MongoDB and 05_Neo4J sessions, so nothing new to remember -- but do
+# not run those stacks at the same time as this one, or the ports will clash.
+#
+#   docker compose up -d
+#   ./load.sh              # imports both datasets
+# =============================================================================
+services:
+  # --- Document store -------------------------------------------------------
+  mongodb:
+    container_name: mongodb
+    image: mongo:${MONGO_VERSION:-8.0}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      # Read-only: the exercises never write to the source data.
+      - ../05_MongoDB/sample_data:/sample_data:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })' || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+    restart: always
+
+  # --- Graph store ----------------------------------------------------------
+  neo4j:
+    container_name: neo4j
+    image: neo4j:${NEO4J_VERSION:-5.26}
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"   # Browser UI
+      - "${NEO4J_BOLT_PORT:-7687}:7687"   # Bolt
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-512M}
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP_MAX:-1G}
+    volumes:
+      # NOT :ro -- the image's entrypoint chowns its import directory on every
+      # start, and on a read-only mount that fails and the container
+      # crash-loops. The exercises never write here anyway.
+      - ../05_Neo4J/sample_data:/import
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u ${NEO4J_USER:-neo4j} -p ${NEO4J_PASSWORD:-password} 'RETURN 1' || exit 1"]
+      interval: 10s
+      retries: 6
+      start_period: 30s
+    restart: always
+
+  # --- One notebook server for both -----------------------------------------
+  notebook:
+    container_name: inclass-notebook
+    build:
+      context: .
+      dockerfile: notebook.Dockerfile
+    ports:
+      - "${JUPYTER_PORT:-8890}:8888"
+    environment:
+      MONGO_URI: mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-password}@mongodb:27017/?authSource=admin
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-password}
+    volumes:
+      - ./notebooks:/notebooks
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    restart: always
+
+# No named volumes: this is a 90-minute throwaway environment, and `docker
+# compose down` should leave nothing behind to clean up next time.
