@@ -87,9 +87,33 @@ No named volumes are declared, so this leaves nothing behind.
 ├── notebook.Dockerfile    # one image with pymongo AND the neo4j driver
 ├── load.sh                # imports both datasets, idempotent
 ├── notebooks/
-│   └── InClass.ipynb      # the whole session
+│   ├── InClass.ipynb            # the session -- project this one
+│   └── InClass_Instructor.ipynb # 👩‍🏫 your copy: solutions + talking points
 └── README.md
 ```
+
+## Teaching from two screens
+
+[`notebooks/InClass_Instructor.ipynb`](notebooks/InClass_Instructor.ipynb) is the
+companion to read from while the students work:
+
+- **Every query filled in** — nothing commented out, nothing to open.
+- **Talking points per query**: what to say, what to point at, the question to
+  ask the room, and the mistake students actually make.
+- **Cross-referenced** as `[student 14]` against cell indices in the student
+  notebook, so the two stay in step.
+- **A cut-list in priority order**, for when the room runs slow, and a flag on
+  the three cells never to cut.
+- **An appendix** of the questions that come up every year ("can't Postgres do
+  all this?", "which is faster?") with short honest answers.
+
+Open it as a second JupyterLab tab, or in a separate browser window on your
+other screen. It runs its **own kernel and its own connections**, so running
+cells there does not touch the student notebook — and it only reads, so it is
+safe to re-run mid-class. Both notebooks executing at once has been tested.
+
+> The solutions also remain in the student notebook's collapsed `<details>`
+> blocks, so students who work ahead are not blocked.
 
 ## What is deliberately cut
 
