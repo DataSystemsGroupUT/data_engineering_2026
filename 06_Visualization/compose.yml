@@ -21,7 +21,8 @@ services:
       POSTGRES_DB: superset_meta
       VIZ_READER_PASSWORD: ${VIZ_READER_PASSWORD}
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      # Docker manages database permissions on Windows and macOS alike.
+      - practice_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
       - ./db/seed:/lesson-seed:ro
     healthcheck:
@@ -63,11 +64,15 @@ services:
       DB_USER: viz_reader
       DB_PASSWORD: ${VIZ_READER_PASSWORD}
       STREAMLIT_SERVER_FILE_WATCHER_TYPE: poll
+      STREAMLIT_SERVER_RUN_ON_SAVE: "true"
     volumes:
-      # A saved edit to app.py appears in the running app without rebuilding.
-      - ./streamlit/app.py:/app/app.py:ro
+      # Mount the folder so editor saves that replace app.py are visible too.
+      - ./streamlit:/app:ro
     ports:
       - "127.0.0.1:${STREAMLIT_PORT:-8501}:8501"
     depends_on:
       db:
         condition: service_healthy
+
+volumes:
+  practice_data:

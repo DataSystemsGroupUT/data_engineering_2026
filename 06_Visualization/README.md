@@ -37,18 +37,28 @@ Prepare the workspace and download images **before class** if possible. If a dow
 
 ## Prepare your workspace
 
-You need a running Docker installation with `docker compose`, a browser, and an editor such as VS Code. As in the earlier practices, work in a **separate folder**, outside the course repository. You can obtain the supplied files from a local checkout or a downloaded repository ZIP; you do not need to edit the course copy.
+You need **Docker Desktop**, a browser, and an editor such as VS Code. Use the supplied files on both Windows and macOS; Python, PostgreSQL, and Superset run inside Docker, so you do not install them on your computer.
+
+| Your computer | Setup and terminal |
+| --- | --- |
+| Windows | Start [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/) in **Linux containers** mode; the WSL 2 backend is recommended. Run the practice commands in **PowerShell**. |
+| Mac with an Intel processor | Start [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/) for Intel. Use **Terminal**. |
+| Mac with Apple Silicon (M-series) | Start Docker Desktop for Mac for Apple Silicon. Use **Terminal**. |
+
+Docker selects the image for your processor automatically. You do not need to edit image tags or add architecture settings. The services still open at the same `localhost` addresses on either operating system.
+
+Check Docker before copying the practice. These commands work in PowerShell and macOS Terminal:
+
+```text
+docker compose version
+docker info --format '{{.OSType}}'
+```
+
+The second command should print `linux`; that is the container type used by Docker Desktop on both Windows and macOS. If it cannot connect, start Docker Desktop and wait until its engine is running.
+
+As in the earlier practices, work in a **separate folder**, outside the course repository. You can obtain the supplied files from a local checkout or a downloaded repository ZIP; you do not need to edit the course copy.
 
 From the **course repository root**, copy `06_Visualization` into a new folder in your home directory. These commands include the hidden `.env.example` and `.gitignore` files and create your local `.env` before Compose needs it. If `superset-practice` already exists, choose a new folder name.
-
-Bash (Linux, macOS, or Git Bash):
-
-```bash
-mkdir "$HOME/superset-practice"
-cp -R 06_Visualization/. "$HOME/superset-practice/"
-cd "$HOME/superset-practice"
-cp .env.example .env
-```
 
 PowerShell (Windows):
 
@@ -57,6 +67,15 @@ New-Item -ItemType Directory -Path "$HOME/superset-practice"
 Get-ChildItem -Force 06_Visualization | Copy-Item -Destination "$HOME/superset-practice" -Recurse -Force
 Set-Location "$HOME/superset-practice"
 Copy-Item .env.example .env
+```
+
+Terminal (macOS):
+
+```bash
+mkdir "$HOME/superset-practice"
+cp -R 06_Visualization/. "$HOME/superset-practice/"
+cd "$HOME/superset-practice"
+cp .env.example .env
 ```
 
 Run every later `docker compose` command **in your practice folder**, the one containing `compose.yml`. The files used by the stack have this layout; the copied Markdown guides can stay alongside them.
@@ -69,7 +88,7 @@ superset-practice/
 ├── .gitignore
 ├── superset_config.py
 ├── db/
-│   ├── init/01-create-database.sh
+│   ├── init/01-create-database.sql
 │   └── seed/02-seed-sales.sql
 ├── superset/Dockerfile
 └── streamlit/
@@ -80,8 +99,8 @@ superset-practice/
 
 The first run downloads a Superset image and a Python image for Streamlit. PostgreSQL uses the same **16.4** image as earlier course practices, so Docker can reuse it if you still have it. If your connection is slow, run these commands in your new practice folder before class:
 
-```bash
-docker compose pull db
+```text
+docker pull postgres:16.4
 docker pull apache/superset:6.1.0
 docker pull python:3.12-slim
 docker compose build
@@ -113,12 +132,12 @@ You can inspect the supporting files if you are curious: [`compose.yml`](compose
 
 Open a terminal in your practice folder. If you have not created `.env` from `.env.example` yet, do that first. Then start the supplied stack:
 
-```bash
+```text
 docker compose up -d --build
 docker compose ps -a
 ```
 
-The `--build` option adds Superset's PostgreSQL driver and installs Streamlit's Python packages. On the first run, give the containers a few minutes. A healthy result has `db`, `superset`, and `streamlit` running; **`superset-init` should have exited with code 0**. It is a one-time setup job, not a failed server. Docker also creates `pgdata/` in your practice folder; it holds both the sample and your saved Superset work.
+The `--build` option adds Superset's PostgreSQL driver and installs Streamlit's Python packages. On the first run, give the containers a few minutes. A healthy result has `db`, `superset`, and `streamlit` running; **`superset-init` should have exited with code 0**. It is a one-time setup job, not a failed server. Docker stores the sample and your saved Superset work in a managed database volume, so no database files are written into your practice folder.
 
 Open the pages:
 
@@ -131,12 +150,11 @@ In GitHub Codespaces, use the **Ports** tab for ports 8088 and 8501 and keep the
 
 Check the sample without installing `psql` on your computer:
 
-```bash
-docker compose exec db psql -U superset -d viz_practice -c \
-  "SELECT COUNT(*), MIN(sale_date), MAX(sale_date) FROM analytics.sales_enriched;"
+```text
+docker compose exec db psql -U superset -d viz_practice -c "SELECT COUNT(*), MIN(sale_date), MAX(sale_date) FROM analytics.sales_enriched;"
 ```
 
-PowerShell users can put the command on one line and omit the backslash. Expect **1,104 rows**, with dates **2026-07-01** through **2026-09-30**. If `superset` has not appeared yet, inspect `docker compose logs --tail=40 superset-init`. Continue when the login page works.
+Use the same one-line command in PowerShell or macOS Terminal. Expect **1,104 rows**, with dates **2026-07-01** through **2026-09-30**. If `superset` has not appeared yet, inspect `docker compose logs --tail=40 superset-init`. Continue when the login page works.
 
 ## Task 2 — connect Superset and ask a question in SQL Lab
 
@@ -285,17 +303,26 @@ If time permits, make a portable copy of your Superset work: open the **Dashboar
 
 Your completed work consists of a saved Superset dashboard, a working Streamlit category filter, the cross-tool figure check, and a short interpretation. Stop the services from your practice folder:
 
-```bash
+```text
 docker compose down
 ```
 
-Your Superset work is saved under `pgdata/` in your practice folder. Return later with `docker compose up -d`; the database seed is created only on the **first** run with an empty `pgdata/` folder. Changes to seed SQL or initial database passwords do not rewrite an existing database. To start with a fresh database, stop the stack and rename `pgdata/` to `pgdata-backup/` (or another unused name), then run `docker compose up -d --build` again. You can rename it in a file manager, or use `mv pgdata pgdata-backup` in Bash and `Rename-Item pgdata pgdata-backup` in PowerShell. Renaming that folder also moves your saved dashboards and sample data. `docker compose down -v` does **not** erase a bind-mounted `pgdata/` folder.
+Your Superset work stays in the Docker-managed `practice_data` volume after a normal `docker compose down`. Keep the same practice folder and return later with `docker compose up -d`; Compose uses the folder name to find its volume. The database seed runs only when that volume is empty. Changes to seed SQL or initial database passwords do not rewrite an existing database.
+
+To deliberately start over, export any dashboard you want to keep, then run the following commands from your practice folder. **`down --volumes` deletes the practice database volume, including saved dashboards, connections, users, and sample data.** The next startup creates a fresh database. These commands are the same in PowerShell and macOS Terminal:
+
+```text
+docker compose down --volumes
+docker compose up -d --build
+```
 
 ### If something does not work
 
 | Symptom | Check |
 | --- | --- |
 | `docker compose` is unavailable | Start Docker Desktop or your Docker engine; check `docker compose version`. |
+| Docker reports a Windows image or platform mismatch | Switch Docker Desktop to **Linux containers**. Use the supplied image tags; they support Intel/AMD and Apple Silicon processors. |
+| Docker reports a shared-folder or mount permission error | Keep the practice in your home directory and allow Docker Desktop to access it. On macOS, check Docker Desktop's file-sharing settings. |
 | Port 8088 or 8501 is already used | Change `SUPERSET_PORT` or `STREAMLIT_PORT` in `.env`, restart Compose, and open the new host port. |
 | Superset login is not ready | Run `docker compose ps -a` and `docker compose logs --tail=50 superset-init`. Wait for init to exit 0. |
 | PostgreSQL test fails in Superset | Use host `db`, database `viz_practice`, reader credentials from `.env`, and port `5432` **inside** Compose. |
@@ -303,7 +330,7 @@ Your Superset work is saved under `pgdata/` in your practice folder. Return late
 | A dashboard filter affects only one chart | Reopen its filter configuration and scope it to all three charts on `sales_enriched`. |
 | A dashboard filter selection does not change any chart | Close the selection menu and click **Apply filters** in the filter bar. |
 | Streamlit has old content after saving | Click **Rerun** or run `docker compose restart streamlit`. The database result cache expires after 60 seconds. |
-| Seed still looks old after editing SQL | The existing `pgdata/` database is reused. Stop Compose and move that folder aside before a fresh start, preserving any work you need. |
+| Seed still looks old after editing SQL | Docker reuses the existing database volume. Export any dashboard you need, then use the deliberate reset commands above. |
 
 ## After class: optional directions
 
