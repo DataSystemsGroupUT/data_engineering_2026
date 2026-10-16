@@ -1,0 +1,12 @@
+retail_dbt:              # must match the "profile" key in dbt_project.yml
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: retail-db     # Docker service name (inside compose network)
+      port: 5432
+      user: retail_user
+      password: retail_pass
+      dbname: retail_db
+      schema: public
+      threads: 4

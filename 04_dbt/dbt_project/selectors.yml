@@ -1,0 +1,29 @@
+selectors:
+  - name: staging_models
+    description: "Run all models in the staging layer."
+    definition:
+      method: path
+      value: models/staging
+
+  - name: intermediate_models
+    description: "Run all models in the intermediate layer."
+    definition:
+      method: path
+      value: models/intermediate
+
+  - name: mart_models
+    description: "Run all models in the marts layer."
+    definition:
+      method: path
+      value: models/marts
+
+  - name: all_models
+    description: "Run all layers — staging, intermediate, then marts."
+    definition:
+      union:
+        - method: path
+          value: models/staging
+        - method: path
+          value: models/intermediate
+        - method: path
+          value: models/marts

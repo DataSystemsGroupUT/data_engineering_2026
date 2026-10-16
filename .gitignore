@@ -4,3 +4,17 @@
 09_Security_Privacy/clickhouse_data
 .requirements/
 node_modules/
+
+# Local PostgreSQL storage created by Docker Compose
+pgdata/
+
+# Generated Python files and package metadata
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Jupyter autosave checkpoints
+.ipynb_checkpoints/
+
+# Local environment configuration; keep templates versioned
+.env

@@ -20,3 +20,15 @@ CREATE TABLE IF NOT EXISTS orders_log (
     response JSONB,
     status VARCHAR(32)
 );
+
+-- Table representing the downstream "order book" that submitted orders land in.
+-- The sensor DAG reads order JSON files and inserts a row here.
+-- source_file is UNIQUE so the same order file cannot be submitted twice.
+CREATE TABLE IF NOT EXISTS order_book (
+    id SERIAL PRIMARY KEY,
+    order_type VARCHAR(8) NOT NULL,
+    price NUMERIC(18,8) NOT NULL,
+    rolling_avg NUMERIC(18,8) NOT NULL,
+    submitted_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    source_file TEXT NOT NULL UNIQUE
+);

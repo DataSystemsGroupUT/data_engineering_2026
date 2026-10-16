@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: int_order_lines
+    description: "Joined order headers and order lines. Materialized as a view — no storage, recomputed on query."
+    columns:
+      - name: item_id
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        data_tests:
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+      - name: product_id
+        data_tests:
+          - not_null
+      - name: line_total
+        data_tests:
+          - not_null
+      - name: order_date
+        data_tests:
+          - not_null

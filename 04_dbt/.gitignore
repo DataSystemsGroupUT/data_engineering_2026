@@ -1,0 +1,14 @@
+# Airflow logs generated at runtime
+logs/
+
+# Postgres data directories (Docker volumes on host)
+pgdata_retail/
+pgdata_airflow/
+
+# dbt build artefacts
+dbt_project/target/
+dbt_project/dbt_packages/
+
+# Python cache
+__pycache__/
+*.pyc

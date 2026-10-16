@@ -1,0 +1,199 @@
+person_id,movie_id,roles
+1,1,Neo
+2,1,Trinity
+3,1,Morpheus
+4,1,Agent Smith
+1,2,Neo
+2,2,Trinity
+3,2,Morpheus
+4,2,Agent Smith
+1,3,Neo
+2,3,Trinity
+3,3,Morpheus
+4,3,Agent Smith
+7,4,Forrest Gump
+7,5,Chuck Noland
+7,6,Sam Baldwin
+8,6,Annie Reed
+7,7,Joe Fox
+8,7,Kathleen Kelly
+8,8,Sally Albright
+7,9,Jim Lovell
+7,10,Paul Edgecomb
+7,11,Zachry
+4,11,Bill Smoke
+2,12,Annie
+1,13,Johnny Utah
+1,14,Kevin Lomax
+8,1,Elias
+17,1,Kadri
+14,1,Elias
+6,2,Elias
+33,2,Elias
+20,2,The Driver
+54,3,The Mother
+39,3,The Journalist
+57,3,Kadri
+12,4,Mari
+37,4,Elias
+23,4,Mari
+24,5,Anna
+42,5,Kadri
+49,5,Mari
+8,5,Markus
+46,5,Herself
+1,6,The Twin
+41,7,The Journalist
+34,7,The Mother
+6,7,Professor Lind
+60,7,Detective
+31,8,The Captain
+42,8,Herself
+57,8,Detective
+36,8,Professor Lind
+3,9,The Twin
+19,9,The Stranger
+55,9,The Stranger
+53,9,Mari
+46,10,The Captain
+47,10,Anna
+22,10,The Driver
+10,10,Anna
+4,10,The Journalist
+50,11,Anna
+38,11,The Stranger
+39,12,The Mother
+32,12,The Mother
+23,12,The Driver
+30,12,The Mother
+35,13,The Captain
+28,13,The Driver
+54,13,Kadri
+26,13,The Journalist
+8,13,Professor Lind
+59,13,Elias
+34,14,Kadri
+43,14,Markus
+4,14,Kadri
+32,15,The Journalist
+15,15,Mari
+4,15,Professor Lind
+16,15,The Twin
+33,15,Anna
+39,15,Professor Lind
+46,15,Herself
+48,16,Elias
+54,16,Professor Lind
+34,16,Markus
+20,17,The Driver
+53,17,Detective
+13,17,Professor Lind
+42,18,Herself
+7,18,The Captain
+28,18,The Stranger
+50,19,Professor Lind
+41,19,The Driver
+7,19,The Captain
+25,20,Elias
+20,20,Anna
+29,20,The Twin
+24,20,The Journalist
+42,20,Markus
+25,21,Professor Lind
+51,21,The Mother
+6,21,The Journalist
+40,22,Anna
+53,22,Herself
+49,22,Herself
+3,22,The Stranger
+58,22,The Journalist
+16,22,The Mother
+52,22,The Stranger
+5,23,Elias
+1,23,Detective
+42,23,The Captain
+57,23,The Captain
+45,23,Herself
+30,23,The Driver
+36,24,Markus
+32,24,Herself
+56,24,Mari
+28,24,Detective
+25,25,The Driver
+3,25,Kadri
+16,25,Mari
+59,25,The Captain
+43,26,Mari
+60,26,The Driver
+49,26,Markus
+45,26,Kadri
+36,26,Detective
+27,27,Detective
+10,27,Markus
+55,27,The Driver
+19,27,The Twin
+20,27,The Mother
+7,27,Elias
+5,28,Markus
+46,28,Mari
+44,28,The Mother
+50,28,Detective
+15,29,The Mother
+57,29,Markus
+1,29,Detective
+25,29,The Driver
+27,29,Mari
+57,30,The Journalist
+43,30,Professor Lind
+37,30,Kadri
+39,30,The Twin
+50,30,Mari
+60,31,Elias
+40,31,The Journalist
+16,31,Professor Lind
+52,31,Anna
+40,32,Professor Lind
+36,32,Mari
+6,32,Anna
+6,33,Elias
+2,33,Herself
+57,33,Anna
+29,33,The Stranger
+16,33,The Journalist
+45,33,Detective
+30,33,Mari
+10,34,Anna
+40,34,Mari
+27,34,Detective
+16,35,Kadri
+36,35,Detective
+7,35,The Journalist
+52,35,The Captain
+30,35,The Twin
+49,35,The Stranger
+58,36,The Journalist
+19,36,Anna
+34,36,Kadri
+54,36,Herself
+37,37,The Driver
+42,37,Markus
+4,37,Markus
+35,37,The Driver
+1,38,The Driver
+27,38,Markus
+25,38,Mari
+41,38,Detective
+32,38,Markus
+40,38,The Captain
+14,39,The Journalist
+30,39,Kadri
+43,39,Mari
+1,39,The Twin
+48,39,Professor Lind
+9,39,Elias
+35,40,Herself
+28,40,Markus
+1,40,The Twin
+4,40,Anna
+25,40,The Driver
+42,40,The Captain
