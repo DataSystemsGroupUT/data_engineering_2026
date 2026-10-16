@@ -1,6 +1,6 @@
 # Practice 7: tell a data story with Superset and Streamlit
 
-**Week 7 · 20 October 2026 · 2 hours**
+**Week 7 · 20 October 2026**
 
 In this practice you will turn a small PostgreSQL dataset into two views of the same business question. In **Apache Superset**, you will connect to a database, explore it with SQL Lab, and build a dashboard by using the browser. In **Streamlit**, you will use and slightly adapt a ready-made Python dashboard. The purpose is to learn what each tool offers and how it connects to data. You do not need to write a Docker configuration, a pipeline, or a Python application from scratch.
 
@@ -20,93 +20,26 @@ By the end, you should be able to:
 
 **Prerequisites:** the earlier Docker and PostgreSQL practices, basic `SELECT` and `GROUP BY` queries, and the lecture's introduction to data visualization. The supplied configuration and Streamlit starter handle the setup and most of the Python work.
 
-## Session overview — 120 minutes
+## Session overview
 
-| Time | Work | Checkpoint |
-| --- | --- | --- |
-| 0–10 min | Read the question and data path | Define gross sales and the row grain. |
-| 10–20 min | Start the environment | Both pages open; 1,104 rows are present. |
-| 20–35 min | Connect Superset and use SQL Lab | The total is €16,835.80. |
-| 35–60 min | Register the dataset and build three charts | Trend, category comparison, and KPI show data. |
-| 60–80 min | Compose and filter a dashboard | Region and category filters change the KPI. |
-| 80–105 min | Inspect and adapt Streamlit | Your new category widget filters its charts. |
-| 105–115 min | Compare and discuss the tools | South + Household is €2,920.00 in both. |
-| 115–120 min | Save your work and stop services | You can restart without losing the Superset dashboard. |
-
-Prepare the workspace and download images **before class** if possible. If a download takes longer than the setup window, begin reading [How the two tools use the data](#how-the-two-tools-use-the-data) while it completes. The optional activities are **outside** the two-hour route.
+| Work | Checkpoint |
+| --- | --- |
+| Read the question and data path | Define gross sales and the row grain. |
+| Start the environment | Both pages open; 1,104 rows are present. |
+| Connect Superset and use SQL Lab | The total is €16,835.80. |
+| Register the dataset and build three charts | Trend, category comparison, and KPI show data. |
+| Compose and filter a dashboard | Region and category filters change the KPI. |
+| Inspect and adapt Streamlit | Your new category widget filters its charts. |
+| Compare and discuss the tools | South + Household is €2,920.00 in both. |
+| Save your work and stop services | You can restart without losing the Superset dashboard. |
 
 ## Prepare your workspace
 
-You need **Docker Desktop**, a browser, and an editor such as VS Code. Use the supplied files on both Windows and macOS; Python, PostgreSQL, and Superset run inside Docker, so you do not install them on your computer.
+Use your Docker and Compose setup from the earlier practices. On Windows and macOS, Docker Desktop should run Linux containers; the supplied images support both Intel/AMD and Apple Silicon processors.
 
-| Your computer | Setup and terminal |
-| --- | --- |
-| Windows | Start [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/) in **Linux containers** mode; the WSL 2 backend is recommended. Run the practice commands in **PowerShell**. |
-| Mac with an Intel processor | Start [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/) for Intel. Use **Terminal**. |
-| Mac with Apple Silicon (M-series) | Start Docker Desktop for Mac for Apple Silicon. Use **Terminal**. |
+Prepare a separate working copy of `06_Visualization` outside the course repository, preserving its subfolders and hidden files. Create a local `.env` from `.env.example`. Your working directory for the Compose commands below should be the folder containing `compose.yml`.
 
-Docker selects the image for your processor automatically. You do not need to edit image tags or add architecture settings. The services still open at the same `localhost` addresses on either operating system.
-
-Check Docker before copying the practice. These commands work in PowerShell and macOS Terminal:
-
-```text
-docker compose version
-docker info --format '{{.OSType}}'
-```
-
-The second command should print `linux`; that is the container type used by Docker Desktop on both Windows and macOS. If it cannot connect, start Docker Desktop and wait until its engine is running.
-
-As in the earlier practices, work in a **separate folder**, outside the course repository. You can obtain the supplied files from a local checkout or a downloaded repository ZIP; you do not need to edit the course copy.
-
-From the **course repository root**, copy `06_Visualization` into a new folder in your home directory. These commands include the hidden `.env.example` and `.gitignore` files and create your local `.env` before Compose needs it. If `superset-practice` already exists, choose a new folder name.
-
-PowerShell (Windows):
-
-```powershell
-New-Item -ItemType Directory -Path "$HOME/superset-practice"
-Get-ChildItem -Force 06_Visualization | Copy-Item -Destination "$HOME/superset-practice" -Recurse -Force
-Set-Location "$HOME/superset-practice"
-Copy-Item .env.example .env
-```
-
-Terminal (macOS):
-
-```bash
-mkdir "$HOME/superset-practice"
-cp -R 06_Visualization/. "$HOME/superset-practice/"
-cd "$HOME/superset-practice"
-cp .env.example .env
-```
-
-Run every later `docker compose` command **in your practice folder**, the one containing `compose.yml`. The files used by the stack have this layout; the copied Markdown guides can stay alongside them.
-
-```text
-superset-practice/
-├── compose.yml
-├── .env.example
-├── .env
-├── .gitignore
-├── superset_config.py
-├── db/
-│   ├── init/01-create-database.sql
-│   └── seed/02-seed-sales.sql
-├── superset/Dockerfile
-└── streamlit/
-    ├── Dockerfile
-    ├── requirements.txt
-    └── app.py
-```
-
-The first run downloads a Superset image and a Python image for Streamlit. PostgreSQL uses the same **16.4** image as earlier course practices, so Docker can reuse it if you still have it. If your connection is slow, run these commands in your new practice folder before class:
-
-```text
-docker pull postgres:16.4
-docker pull apache/superset:6.1.0
-docker pull python:3.12-slim
-docker compose build
-```
-
-The images and built Python packages are reused later. The sample credentials in `.env.example` are for a **private local practice**; keep any forwarded Codespaces ports private.
+Stop any conflicting stacks left running from earlier practices. This session uses host ports **8088** for Superset and **8501** for Streamlit; you can change them through `SUPERSET_PORT` and `STREAMLIT_PORT` in `.env` if needed. The supplied credentials are for private local practice.
 
 ## How the two tools use the data
 
@@ -130,14 +63,14 @@ You can inspect the supporting files if you are curious: [`compose.yml`](compose
 
 ## Task 1 — start and check the environment
 
-Open a terminal in your practice folder. If you have not created `.env` from `.env.example` yet, do that first. Then start the supplied stack:
+From your working folder, start the supplied stack:
 
 ```text
 docker compose up -d --build
 docker compose ps -a
 ```
 
-The `--build` option adds Superset's PostgreSQL driver and installs Streamlit's Python packages. On the first run, give the containers a few minutes. A healthy result has `db`, `superset`, and `streamlit` running; **`superset-init` should have exited with code 0**. It is a one-time setup job, not a failed server. Docker stores the sample and your saved Superset work in a managed database volume, so no database files are written into your practice folder.
+The `--build` option adds Superset's PostgreSQL driver and installs Streamlit's Python packages. A healthy result has `db`, `superset`, and `streamlit` running; **`superset-init` should have exited with code 0**. It is a one-time setup job, not a failed server. Docker stores the sample and your saved Superset work in a managed database volume, so no database files are written into your practice folder.
 
 Open the pages:
 
@@ -154,7 +87,7 @@ Check the sample without installing `psql` on your computer:
 docker compose exec db psql -U superset -d viz_practice -c "SELECT COUNT(*), MIN(sale_date), MAX(sale_date) FROM analytics.sales_enriched;"
 ```
 
-Use the same one-line command in PowerShell or macOS Terminal. Expect **1,104 rows**, with dates **2026-07-01** through **2026-09-30**. If `superset` has not appeared yet, inspect `docker compose logs --tail=40 superset-init`. Continue when the login page works.
+Expect **1,104 rows**, with dates **2026-07-01** through **2026-09-30**. If `superset` has not appeared yet, inspect `docker compose logs --tail=40 superset-init`. Continue when the login page works.
 
 ## Task 2 — connect Superset and ask a question in SQL Lab
 
@@ -297,7 +230,7 @@ There is no universal winner. For a project, choose based on the audience, desir
 
 Copy the **Superset dashboard URL** from the browser if you want to return to it. The Streamlit address is the local app's URL. These `localhost` links work only on your own computer while the services run; sharing a dashboard with someone else needs a hosted service and suitable access controls. The [weather example project](https://github.com/KristoR/ut-andmeinseneeria-2026/tree/main/projekt/naidisprojekt-ilmaandmed) (in Estonian) shows a larger Streamlit app connected to a PostgreSQL mart.
 
-If time permits, make a portable copy of your Superset work: open the **Dashboards** list, select your dashboard, and use its **Export** action to download a ZIP file. In another Superset instance, the **Import** action can restore the dashboard together with its related charts, datasets, and database connection definition. You still need the underlying PostgreSQL data and a working connection to it: on a different machine, the imported `db` hostname or credentials may need updating before charts load. Keep the ZIP as a dashboard backup, and keep the database data separately. Treat the ZIP as private because connection settings can be included. See [Superset's dashboard import/export API](https://superset.apache.org/developer-docs/6.1.0/api/dashboards/) and [connection export notes](https://superset.apache.org/admin-docs/6.1.0/configuration/importing-exporting-datasources/) for the details.
+To back up your Superset work, open the **Dashboards** list, select your dashboard, and use its **Export** action to download a ZIP file. In another Superset instance, the **Import** action can restore the dashboard together with its related charts, datasets, and database connection definition. You still need the underlying PostgreSQL data and a working connection to it: on a different machine, the imported `db` hostname or credentials may need updating before charts load. Keep the ZIP as a dashboard backup, and keep the database data separately. Treat the ZIP as private because connection settings can be included. See [Superset's dashboard import/export API](https://superset.apache.org/developer-docs/6.1.0/api/dashboards/) and [connection export notes](https://superset.apache.org/admin-docs/6.1.0/configuration/importing-exporting-datasources/) for the details.
 
 ## Finish and restart later
 
@@ -309,7 +242,7 @@ docker compose down
 
 Your Superset work stays in the Docker-managed `practice_data` volume after a normal `docker compose down`. Keep the same practice folder and return later with `docker compose up -d`; Compose uses the folder name to find its volume. The database seed runs only when that volume is empty. Changes to seed SQL or initial database passwords do not rewrite an existing database.
 
-To deliberately start over, export any dashboard you want to keep, then run the following commands from your practice folder. **`down --volumes` deletes the practice database volume, including saved dashboards, connections, users, and sample data.** The next startup creates a fresh database. These commands are the same in PowerShell and macOS Terminal:
+To deliberately start over, export any dashboard you want to keep, then run the following commands from your practice folder. **`down --volumes` deletes the practice database volume, including saved dashboards, connections, users, and sample data.** The next startup creates a fresh database:
 
 ```text
 docker compose down --volumes
