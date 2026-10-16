@@ -1,0 +1,78 @@
+# Run from this folder: docker compose up -d --build
+# PostgreSQL holds both the lesson data and Superset's own saved dashboards.
+# The two databases are separate, but share one small PostgreSQL container.
+x-superset-image: &superset-image
+  image: course-superset-postgres:6.1.0
+  build: ./superset
+
+x-superset-env: &superset-env
+  SUPERSET_CONFIG_PATH: /app/superset_config.py
+  SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:?Copy .env.example to .env first}
+  SUPERSET_META_URI: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/superset_meta
+  ADMIN_PASSWORD: ${SUPERSET_ADMIN_PASSWORD}
+  SUPERSET_LOAD_EXAMPLES: "no"
+
+services:
+  db:
+    image: postgres:16.4
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: superset_meta
+      VIZ_READER_PASSWORD: ${VIZ_READER_PASSWORD}
+    volumes:
+      # Docker manages database permissions on Windows and macOS alike.
+      - practice_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - ./db/seed:/lesson-seed:ro
+    healthcheck:
+      # TCP is available only after PostgreSQL has finished running seed SQL.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d viz_practice"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # This job runs migrations and creates the local admin account, then exits.
+  superset-init:
+    <<: *superset-image
+    environment: *superset-env
+    command: ["/app/docker/docker-init.sh"]
+    volumes:
+      - ./superset_config.py:/app/superset_config.py:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  superset:
+    <<: *superset-image
+    environment: *superset-env
+    volumes:
+      - ./superset_config.py:/app/superset_config.py:ro
+    ports:
+      - "127.0.0.1:${SUPERSET_PORT:-8088}:8088"
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
+
+  streamlit:
+    build: ./streamlit
+    environment:
+      DB_HOST: db
+      DB_NAME: viz_practice
+      DB_USER: viz_reader
+      DB_PASSWORD: ${VIZ_READER_PASSWORD}
+      STREAMLIT_SERVER_FILE_WATCHER_TYPE: poll
+      STREAMLIT_SERVER_RUN_ON_SAVE: "true"
+    volumes:
+      # Mount the folder so editor saves that replace app.py are visible too.
+      - ./streamlit:/app:ro
+    ports:
+      - "127.0.0.1:${STREAMLIT_PORT:-8501}:8501"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  practice_data:

@@ -18,17 +18,18 @@ sample datasets, SQL and Python examples, and reference solutions.
 Use the weekly inventory to find practice instructions and prepare for class.
 Weeks follow the 2026 course schedule; folder numbers are lesson identifiers.
 **Update needed** marks materials awaiting revision for this year's course or
-instructions that are missing from the repository.
+instructions that are missing from the repository. **Draft** means the lesson
+has been rewritten but still needs a full Docker and browser walkthrough.
 
 | Week | Practice date | Session | Materials | Status |
 | --- | --- | --- | --- | --- |
 | 1 | 8 Sep 2026 | Docker and PostgreSQL | [Docker practice](00_Docker/README.md) | Ok |
-| 2 | 15 Sep 2026 | Relational modeling and ER diagrams | [ER practice](01_ER/assignment/README.md) | Ok |
+| 2 | 15 Sep 2026 | Relational modeling and ER diagrams | [ER practice](01_ER/README.md) | Ok |
 | 3 | 22 Sep 2026 | Dimensional modeling and star schemas | [Star schema practice](02_Star_Schema/README.md) | Ok |
 | 4 | 29 Sep 2026 | Workflow orchestration with Airflow | [Airflow practice](03_Airflow/README.md) | Ok |
 | 5 | 6 Oct 2026 | Data transformation with dbt | [dbt practice](04_dbt/README.md) | Ok |
-| 6 | 13 Oct 2026 | Semi-structured data: MongoDB and Neo4j | [In-class 90 min](05_InClass_90min/README.md) (both, short); full: [MongoDB](05_MongoDB/README.md), [Neo4j](05_Neo4J/README.md) | Ok |
-| 7 | 20 Oct 2026 | Data visualization: Streamlit and Superset | [Superset practice](11_Superset/README.md); Streamlit materials missing | Update needed |
+| 6 | 13 Oct 2026 | Semi-structured data: MongoDB and Neo4j | [In-class 90 min](05_MongoDB_AND_Neo4J/README.md) (both, short); full: [MongoDB](05_MongoDB/README.md), [Neo4j](05_Neo4J/README.md) | Ok |
+| 7 | 20 Oct 2026 | Data visualization: Streamlit and Superset | [Superset and Streamlit practice](06_Visualization/README.md) | Draft — Docker walkthrough pending |
 | 8 | 27 Oct 2026 | Project work | | |
 | 9 | 3 Nov 2026 | Project work | | |
 | 10 | 10 Nov 2026 | Project work | | |
@@ -56,10 +57,10 @@ no standalone practical session in the 2026 schedule.
 
 | Status | Topic | Repository instructions |
 | --- | --- | --- |
-| Legacy | ClickHouse: analytical storage, star schemas, and queries | [05_ClickHouse](05_ClickHouse/README.md) |
-| Legacy | Iceberg with DuckDB, PyIceberg, and MinIO | [08_Iceberg](08_Iceberg/README.md) |
-| Legacy | Security and privacy: permissions, masking, and auditing | [09_Security_Privacy](09_Security_Privacy/README.md) |
-| Legacy | OpenMetadata: cataloging, data quality, and lineage | [10_OpenMetadata](10_OpenMetadata/README.md) |
+| Legacy | ClickHouse: analytical storage, star schemas, and queries | [05_ClickHouse](archive/05_ClickHouse/README.md) |
+| Legacy | Iceberg with DuckDB, PyIceberg, and MinIO | [08_Iceberg](archive/08_Iceberg/README.md) |
+| Legacy | Security and privacy: permissions, masking, and auditing | [09_Security_Privacy](archive/09_Security_Privacy/README.md) |
+| Legacy | OpenMetadata: cataloging, data quality, and lineage | [10_OpenMetadata](archive/10_OpenMetadata/README.md) |
 
-The existing dbt and Superset practices use ClickHouse; the legacy ClickHouse
-lesson provides supporting setup instructions and sample data.
+The current dbt and visualization practices use PostgreSQL. The legacy
+ClickHouse lesson remains available as an optional analytical storage example.
