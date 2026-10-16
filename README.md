@@ -29,7 +29,7 @@ has been rewritten but still needs a full Docker and browser walkthrough.
 | 4 | 29 Sep 2026 | Workflow orchestration with Airflow | [Airflow practice](03_Airflow/README.md) | Ok |
 | 5 | 6 Oct 2026 | Data transformation with dbt | [dbt practice](04_dbt/README.md) | Ok |
 | 6 | 13 Oct 2026 | Semi-structured data: MongoDB and Neo4j | [In-class 90 min](05_MongoDB_AND_Neo4J/README.md) (both, short); full: [MongoDB](05_MongoDB/README.md), [Neo4j](05_Neo4J/README.md) | Ok |
-| 7 | 20 Oct 2026 | Data visualization: Streamlit and Superset | [Superset and Streamlit practice](06_Visualization/README.md) | Draft — runtime check needed |
+| 7 | 20 Oct 2026 | Data visualization: Streamlit and Superset | [Superset and Streamlit practice](06_Visualization/README.md) | Draft — Docker walkthrough pending |
 | 8 | 27 Oct 2026 | Project work | | |
 | 9 | 3 Nov 2026 | Project work | | |
 | 10 | 10 Nov 2026 | Project work | | |

@@ -4,9 +4,9 @@ Audited 29 September 2026 against the **previous lesson** at commit `dbd5aa0`. T
 
 ## Verdict
 
-The present lesson is a useful Superset feature checklist, but it does not fit week 7 as written. Week 7 is a **two-hour Streamlit and Superset** session; [ClickHouse is a legacy lesson](../README.md), and no Streamlit task exists here. Most of this folder is a copied Superset development environment. The analytical database needed by the lesson is absent from its Compose file, so `docker compose up -d` alone cannot reach Task 1.
+The previous audited lesson was a useful Superset feature checklist, but it did not fit week 7 as written. Week 7 is a **two-hour Streamlit and Superset** session; [ClickHouse is a legacy lesson](../README.md), and the previous lesson had no Streamlit task. Most of its files came from a copied Superset development environment. The analytical database needed by that lesson was absent from its Compose file, so `docker compose up -d` alone could not reach Task 1. The [revised practice](README.md) addresses these findings.
 
-| Area | Current state | Consequence / decision |
+| Area | State in the audited lesson | Consequence / decision |
 | --- | --- | --- |
 | Course alignment | Superset + ClickHouse only; references “Project 3” and an optional security exercise | Teach visualization and serving on PostgreSQL, already introduced in week 1. Make Streamlit a core task; leave ClickHouse integration as an optional extension. |
 | Startup | Five Superset services plus an instructed manual ClickHouse addition and SQL loading | Replace with a small, self-contained course Compose setup and automatic deterministic data seeding. |

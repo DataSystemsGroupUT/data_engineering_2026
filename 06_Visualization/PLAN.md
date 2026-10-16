@@ -1,6 +1,6 @@
 # Plan: two-hour Superset and Streamlit practice
 
-Status: implemented as a student-facing draft on 30 September 2026; Docker runtime walkthrough remains open. This plan follows the [baseline audit](AUDIT.md) and points to the [new practice](README.md).
+Status: implemented as a student-facing draft on 30 September 2026; integrated with the cleaned main branch and renamed to `06_Visualization` on 16 October 2026. Automated data, application, and Superset browser checks pass; the full Docker and timed student walkthrough remains open. This plan follows the [baseline audit](AUDIT.md) and points to the [new practice](README.md).
 
 ## Session outcome and boundary
 
@@ -14,7 +14,7 @@ Suggested question: **Which product categories and regions deserve attention in 
 | --- | --- | --- |
 | Analytics data | One `postgres:16.4` server, with a `viz_practice` database and seeded `analytics` schema | Reuses the image from earlier course practices. A deterministic seed makes the first exercise reliable. |
 | Superset metadata | A separate `superset_meta` database on the **same** PostgreSQL server | Keeps internal Superset tables out of the student dataset without adding another server. |
-| Superset | Official `apache/superset:6.1.0` image with a three-line Dockerfile that installs `psycopg2-binary==2.9.11`, plus one-time init service | The [6.1.0 release image is lean](https://superset.apache.org/admin-docs/6.1.0/installation/docker-builds/) and lacks this driver. A small layer avoids the moving `latest-dev` image and copied upstream source. No Redis, worker, or beat. |
+| Superset | Official `apache/superset:6.1.0` image with a small Dockerfile that installs `psycopg2-binary==2.9.11`, plus one-time init service | The [6.1.0 release image is lean](https://superset.apache.org/admin-docs/6.1.0/installation/docker-builds/) and lacks this driver. A small layer avoids the moving `latest-dev` image and copied upstream source. No Redis, worker, or beat. |
 | Streamlit | Small Python image with `streamlit==1.64.0`, `pandas==2.3.3`, and `psycopg[binary]==3.3.6` | One guided app using the same SQL view. No host Python setup and no weather pipeline. |
 | Credentials | Ignored `.env` copied from a local demo template, local admin, read-only `viz_reader` for analytics | Keeps startup reproducible and makes the difference between metadata access and chart-data access visible. Ports remain private on localhost. |
 
@@ -54,9 +54,23 @@ This leaves manual creation of database roles, manual database loading, CI, live
 ## Revision status and remaining gate
 
 - [x] Replace the previous Compose stack with one PostgreSQL container, pinned Superset 6.1.0 plus its driver, one-time init, and one Streamlit app. Remove copied upstream development files from the active lesson; git history retains them.
-- [x] Add an ignored `.env` template, deterministic SQL seed, and a minimal Streamlit app with pinned dependencies. The student edit is one marked category-widget line.
+- [x] Add a versioned `.env.example` template with an ignored local `.env`, deterministic SQL seed, and a minimal Streamlit app with pinned dependencies. The student edit is one marked category-widget line.
 - [x] Rewrite [`README.md`](README.md) around the timed agenda: startup, expected outputs, Superset actions, Streamlit edit, comparison, troubleshooting, cleanup, and optional project extension. Update the course inventory to point to it.
-- [ ] Validate with a **fresh `pgdata/` directory**: Compose config; image pull/build; init and page readiness; seed counts and totals; Superset PostgreSQL connection, dataset, chart and dashboard filter; Streamlit edit/rerun and matching number; repeat startup; normal stop and moving `pgdata/` aside for reset. Check Windows command text and record any UI labels that differ from the guide.
+- [x] Align the lesson folder with the active course sequence and repair root README links to the ER, combined MongoDB/Neo4j, and archived lessons. Provide Bash and PowerShell workspace and `.env` copy commands before the first Compose command.
+- [x] Validate Compose configuration, the PostgreSQL seed and reader permissions, database restart and fresh setup, and both the Streamlit starter and student category-widget edit using the pinned dependencies.
+- [x] Exercise the published Superset image's driver installation, initialization twice, SQL Lab, dataset and metric creation, chart queries, and dashboard export. Verify browser login, rendering of three charts, native filters scoped to all charts, and clearing filters.
+- [ ] Run the **full Docker Compose stack** from a separate practice folder with fresh `pgdata/`: image builds, service readiness, both browser pages, the Streamlit edit/rerun, normal stop/restart, and moving the data folder aside for reset. Follow the Superset chart/dashboard creation steps manually and execute the Windows copy commands.
 - [ ] Time a first-run walkthrough including image pull/setup. The guide includes pre-class image-pull instructions; adjust the 10-minute setup window if needed.
 
 The lesson revision should not be considered ready solely because Compose parses. The acceptance condition is that a student starting from a separate practice folder can complete the two visual outputs and explain a consistent metric within 120 minutes.
+
+## Validation on 16 October 2026
+
+| Area | Verified result |
+| --- | --- |
+| Workspace and configuration | Bash copying preserves hidden files and subfolders; Compose 5.5.1 validates the separate workspace after `.env` is copied. Shell/Python syntax checks pass. All 58 relative links in the repository's 19 README files resolve. PowerShell commands were reviewed, not executed. |
+| PostgreSQL 16.4 | The supplied initialization and seed produce 1,104 rows from 1 July to 30 September 2026, €16,835.80 overall, and €2,920.00 for South + Household. Reader permissions prevent changes to lesson data and direct access to the underlying tables. Restart retains the data; a fresh cluster reproduces the same figures. |
+| Streamlit 1.64.0 | AppTest with Python 3.12.15, the exact pinned dependencies, and real PostgreSQL passes for the starter and the README's category-widget edit. Region/category selections, empty selections, restored selections, KPIs, displayed rows, and both charts agree. The dataframe uses the supported `width="stretch"` parameter. |
+| Superset 6.1.0 | The published ARM64 image accepts the Dockerfile's PostgreSQL driver installation. Its shipped initialization exits 0 on fresh and repeat runs. HTTP login, CSRF, the reader connection, SQL Lab, dataset registration, and the saved metric work. Browser checks render the KPI, 92-day line, and four-category bar chart; applying South + Household changes all three charts and shows €2,920.00, while clearing filters restores €16,835.80. Export includes the dashboard, three charts, dataset, and database definition. |
+
+The Superset image was unpacked and run in an isolated filesystem against native PostgreSQL because this workspace has no Docker engine. These checks exercise the released application and image setup commands, but do not verify Docker builds, Compose networking, or container lifecycle. The remaining Docker and timed student walkthroughs above are still required.

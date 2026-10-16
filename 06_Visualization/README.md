@@ -1,4 +1,4 @@
-# Practice 11: tell a data story with Superset and Streamlit
+# Practice 7: tell a data story with Superset and Streamlit
 
 **Week 7 · 20 October 2026 · 2 hours**
 
@@ -39,14 +39,33 @@ Prepare the workspace and download images **before class** if possible. If a dow
 
 You need a running Docker installation with `docker compose`, a browser, and an editor such as VS Code. As in the earlier practices, work in a **separate folder**, outside the course repository. You can obtain the supplied files from a local checkout or a downloaded repository ZIP; you do not need to edit the course copy.
 
-1. Create a folder such as `superset-practice`.
-2. Copy these files and folders from `11_Superset` into it, keeping the layout below. The hidden `.env.example` file is needed too.
-3. Open a terminal **in your practice folder**, the one containing `compose.yml`. Run every later `docker compose` command there.
+From the **course repository root**, copy `06_Visualization` into a new folder in your home directory. These commands include the hidden `.env.example` and `.gitignore` files and create your local `.env` before Compose needs it. If `superset-practice` already exists, choose a new folder name.
+
+Bash (Linux, macOS, or Git Bash):
+
+```bash
+mkdir "$HOME/superset-practice"
+cp -R 06_Visualization/. "$HOME/superset-practice/"
+cd "$HOME/superset-practice"
+cp .env.example .env
+```
+
+PowerShell (Windows):
+
+```powershell
+New-Item -ItemType Directory -Path "$HOME/superset-practice"
+Get-ChildItem -Force 06_Visualization | Copy-Item -Destination "$HOME/superset-practice" -Recurse -Force
+Set-Location "$HOME/superset-practice"
+Copy-Item .env.example .env
+```
+
+Run every later `docker compose` command **in your practice folder**, the one containing `compose.yml`. The files used by the stack have this layout; the copied Markdown guides can stay alongside them.
 
 ```text
 superset-practice/
 ├── compose.yml
 ├── .env.example
+├── .env
 ├── .gitignore
 ├── superset_config.py
 ├── db/
@@ -201,9 +220,9 @@ Add two **native filters** in the dashboard editor. Open the **Filter Bar → + 
 
 1. Add a filter with type **Value** on `region` from the `sales_enriched` dataset. Name it `Region` and apply it to **all three charts**.
 2. Add another filter with type **Value** on `category` from the same dataset. Name it `Category` and apply it to **all three charts**.
-3. Save filters and the dashboard. In view mode, choose **South** and **Household**. The total should be **€2,920.00** (perhaps displayed as `2.92k` if compact formatting is on).
+3. Save filters and the dashboard. In view mode, choose **South** and **Household**, close the selection menus, and click **Apply filters** in the filter bar. The total should be **€2,920.00** (perhaps displayed as `2.92k` if compact formatting is on).
 
-Filters should change the KPI, trend, and bar chart together. If one chart stays the same, check the filter's **scope** and whether that chart uses the same dataset. Restore **all regions and categories** before your first general interpretation.
+Filters should change the KPI, trend, and bar chart together. If one chart stays the same, check the filter's **scope** and whether that chart uses the same dataset. Use **Clear all**, then **Apply filters** if enabled, to restore **all regions and categories** before your first general interpretation.
 
 Write two sentences below the dashboard as a **Markdown/text block** if the editor offers one, or in your notes:
 
@@ -247,7 +266,7 @@ Choose **South** and **Household** in Streamlit. Check that its gross-sales KPI 
 
 ## Task 7 — compare, choose, and share
 
-Keep South + Household selected in both tools, and verify the **€2,920.00** figure. If the figures differ, check the date range, both filters, and which metric each tool is adding. Superset and Streamlit are linked to **the same data view**, but they maintain their own filter state; choosing a filter in one does not automatically change the other.
+In Superset, select **South** and **Household** again and click **Apply filters**. Keep the same selection in Streamlit, and verify **€2,920.00** in both tools. If the figures differ, check the date range, both filters, and which metric each tool is adding. Superset and Streamlit are linked to **the same data view**, but they maintain their own filter state; choosing a filter in one does not automatically change the other.
 
 | Question | Superset | Streamlit |
 | --- | --- | --- |
@@ -282,6 +301,7 @@ Your Superset work is saved under `pgdata/` in your practice folder. Return late
 | PostgreSQL test fails in Superset | Use host `db`, database `viz_practice`, reader credentials from `.env`, and port `5432` **inside** Compose. |
 | Chart has no rows | Set its time range to **No filter / All time**. The sample ends on 30 September 2026. |
 | A dashboard filter affects only one chart | Reopen its filter configuration and scope it to all three charts on `sales_enriched`. |
+| A dashboard filter selection does not change any chart | Close the selection menu and click **Apply filters** in the filter bar. |
 | Streamlit has old content after saving | Click **Rerun** or run `docker compose restart streamlit`. The database result cache expires after 60 seconds. |
 | Seed still looks old after editing SQL | The existing `pgdata/` database is reused. Stop Compose and move that folder aside before a fresh start, preserving any work you need. |
 
@@ -291,4 +311,4 @@ Your Superset work is saved under `pgdata/` in your practice folder. Return late
 - Replace the practice view with a read-only connection to your project's PostgreSQL mart. The [advanced Superset example](https://github.com/KristoR/ut-andmeinseneeria-2026/tree/main/09-arianalyytika-ja-serveerimine/edasijoudnud) (in Estonian) shows a larger dbt-to-mart path. The [base example](https://github.com/KristoR/ut-andmeinseneeria-2026/tree/main/09-arianalyytika-ja-serveerimine/baastase) (in Estonian) gives further dashboard storytelling tasks.
 - If your project uses ClickHouse, use its [Superset connection guide](https://clickhouse.com/docs/integrations/superset) after the core exercise. The ClickHouse lesson is a legacy resource this year, so it is not needed for this practice.
 
-For more detail on the tools, see the official [Superset dashboard guide](https://superset.apache.org/user-docs/using-superset/creating-your-first-dashboard/) and [Streamlit installation and run guide](https://docs.streamlit.io/get-started/installation/command-line).
+For more detail on the tools, see the official [Superset 6.1.0 dashboard guide](https://superset.apache.org/user-docs/6.1.0/using-superset/creating-your-first-dashboard/) and [Streamlit installation and run guide](https://docs.streamlit.io/get-started/installation/command-line).

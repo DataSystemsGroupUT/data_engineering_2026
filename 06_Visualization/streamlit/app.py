@@ -96,7 +96,7 @@ with st.expander("Show the rows behind these charts"):
     st.dataframe(
         visible[["sale_date", "region", "category", "quantity", "sales_amount"]],
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
 
 st.caption(
